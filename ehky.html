@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>احكي بقى</title>
+<meta name="description" content="أداة مجانية لتمرين نفسك على شرح مفاهيم الاقتصاد السلوكي ونظرية الألعاب من غير سكريبت. من عند أنس وائل.">
+<meta property="og:title" content="احكي بقى">
+<meta property="og:description" content="أداة مجانية لتمرين نفسك على شرح مفاهيم الاقتصاد السلوكي ونظرية الألعاب من غير سكريبت.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="احكي بقى">
+<meta name="twitter:description" content="أداة مجانية لتمرين نفسك على شرح مفاهيم الاقتصاد السلوكي ونظرية الألعاب من غير سكريبت.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #16211d;
+    --bg-2: #1e2c26;
+    --bg-3: #253830;
+    --text: #efe7d8;
+    --text-dim: #93a69d;
+    --accent: #d2a24c;
+    --accent-2: #6e9c8e;
+    --line: rgba(239,231,216,0.12);
+    --danger: #c4674f;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Cairo', sans-serif;
+    background: radial-gradient(ellipse 900px 600px at 30% 0%, #21332b 0%, var(--bg) 55%);
+    color: var(--text);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+    transition: transform .2s;
+  }
+  body.mirrored{
+    transform: scaleX(-1);
+  }
+  .wrap{
+    width:100%;
+    max-width:640px;
+    padding: 20px 20px 24px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    justify-content:flex-start;
+  }
+  .brand{
+    text-align:center;
+    margin-bottom:16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .brand h1{
+    font-size:30px;
+    font-weight:800;
+    letter-spacing:0;
+  }
+  .made-by{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background: var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 16px 6px 8px;
+    font-size:13px;
+    color: var(--text-dim);
+    text-decoration:none;
+    transition: border-color .2s;
+  }
+  .made-by:hover{ border-color: var(--text-dim); }
+  .made-by .ig-icon{
+    width:22px; height:22px;
+    border-radius:50%;
+    background: var(--bg-3);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .made-by .ig-icon svg{ width:13px; height:13px; }
+  .made-by strong{ color: var(--text); font-weight:700; unicode-bidi: isolate; direction: ltr; }
+  .social-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .made-by-label{
+    font-size:13px;
+    color: var(--text-dim);
+    font-weight:600;
+  }
+  .icon-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .category-select{
+    position:relative;
+    width:100%;
+    max-width:280px;
+    margin-bottom:14px;
+  }
+  .category-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background: var(--bg-2);
+    border:1px solid var(--line);
+    color: var(--text);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    padding:12px 16px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .category-btn .chevron{
+    color: var(--text-dim);
+    font-size:12px;
+    transition: transform .2s;
+  }
+  .category-select.open .category-btn .chevron{ transform: rotate(180deg); }
+  .category-select.open .category-btn{ border-radius:16px 16px 0 0; }
+  .category-list{
+    display:none;
+    position:absolute;
+    top:100%; right:0; left:0;
+    background: var(--bg-2);
+    border:1px solid var(--line);
+    border-top:none;
+    border-radius:0 0 16px 16px;
+    overflow:hidden;
+    z-index:10;
+    max-height:260px;
+    overflow-y:auto;
+  }
+  .category-select.open .category-list{ display:block; }
+  .category-option{
+    display:block;
+    width:100%;
+    text-align:right;
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    padding:11px 16px;
+    cursor:pointer;
+    transition: background .15s, color .15s;
+  }
+  .category-option:hover{ background: var(--bg-3); color: var(--text); }
+  .category-option.selected{ color: var(--accent); background: var(--bg-3); }
+  .brand p{
+    color: var(--text-dim);
+    font-size:13px;
+    max-width:340px;
+    line-height:1.7;
+  }
+  .modes{
+    display:flex;
+    background: var(--bg-2);
+    border-radius:999px;
+    padding:4px;
+    gap:4px;
+    margin-bottom:14px;
+    border:1px solid var(--line);
+  }
+  .modes button{
+    border:none;
+    background:transparent;
+    color: var(--text-dim);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition: background .25s, color .25s;
+  }
+  .modes button.active{
+    background: var(--accent-2);
+    color: #0f1b17;
+  }
+  .modes button:nth-child(2).active{
+    background: var(--accent);
+  }
+  .hint{
+    color:var(--text-dim);
+    font-size:13px;
+    text-align:center;
+    max-width:420px;
+    line-height:1.7;
+    margin-bottom:16px;
+  }
+  .status{
+    color:var(--accent);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+    margin-bottom:10px;
+    min-height:16px;
+    line-height:1.4;
+  }
+  .topic-box{
+    text-align:center;
+    min-height:64px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    width:100%;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .topic-ar{
+    font-size:40px;
+    font-weight:800;
+    line-height:1.35;
+    max-width:520px;
+  }
+  .topic-en{
+    color:var(--text-dim);
+    font-size:14px;
+    margin-top:10px;
+    font-weight:500;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+  .topic-hook{
+    color: var(--accent-2);
+    font-size:14px;
+    margin-top:14px;
+    max-width:440px;
+    line-height:1.8;
+    font-weight:500;
+  }
+  .placeholder{
+    color: var(--text-dim);
+    font-size:16px;
+  }
+  .actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .btn{
+    font-family:inherit;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+    border-radius:999px;
+    transition: transform .15s, background .2s, opacity .2s;
+  }
+  .btn:active{ transform: scale(.96); }
+  .btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; }
+  .btn-primary{
+    background: var(--accent);
+    color:#20160a;
+    font-size:15px;
+    padding:13px 26px;
+  }
+  .btn-secondary{
+    background: transparent;
+    border:1px solid var(--line);
+    color: var(--text);
+    font-size:14px;
+    padding:12px 22px;
+  }
+  .btn-secondary:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+  .icon-btn{
+    width:44px; height:44px;
+    border-radius:50%;
+    background: transparent;
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    font-size:18px;
+  }
+  .back-btn{
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px;
+  }
+  .back-btn:hover{ color: var(--text); }
+  .overlay-topbar{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:4px;
+    flex-shrink:0;
+  }
+  .mirror-btn-ov{
+    width:36px; height:36px;
+    border-radius:50%;
+    background: transparent;
+    border:1px solid var(--line);
+    color: var(--text-dim);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .mirror-btn-ov svg{ width:16px; height:16px; }
+  .mirror-btn-ov:hover{ color: var(--text); border-color: var(--text-dim); }
+  .mirror-btn-ov.active{ color: var(--accent); border-color: var(--accent); }
+  .icon-btn:hover{ color:var(--text); border-color: var(--text-dim); }
+  .icon-btn.active{ color: var(--accent); border-color: var(--accent); }
+  .icon-btn svg{ width:18px; height:18px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .copy-btn{
+    background:none;
+    border:1px solid var(--line);
+    color: var(--text-dim);
+    font-family:inherit;
+    font-size:13px;
+    padding:7px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    transition: color .2s, border-color .2s;
+  }
+  .copy-btn:hover{ color:var(--text); border-color:var(--text-dim); }
+  .copy-btn.copied{ color: var(--accent-2); border-color: var(--accent-2); }
+  .hidden{ display:none !important; }
+  .copy-fallback{
+    display:none;
+    width:220px;
+    max-width:80vw;
+    text-align:center;
+    background: var(--bg-2);
+    border:1px solid var(--accent-2);
+    color: var(--text);
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    padding:9px 12px;
+    border-radius:10px;
+    margin-top:14px;
+  }
+  .copy-fallback.show{ display:block; }
+
+  /* overlay */
+  .overlay{
+    position:fixed; inset:0;
+    background: var(--bg);
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding: max(16px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+    overflow-y:auto;
+    z-index:50;
+  }
+  .overlay.show{ display:flex; }
+  .overlay-topic{
+    color:var(--text-dim);
+    font-size:13px;
+    margin-bottom:4px;
+    margin-top:10px;
+  }
+  .overlay-topic-name{
+    font-size:19px;
+    font-weight:800;
+    text-align:center;
+    max-width:480px;
+    margin-bottom:12px;
+  }
+  .ring-wrap{
+    position:relative;
+    width:260px; height:260px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .ring-wrap svg{ width:100%; height:100%; transform: rotate(-90deg); }
+  .ring-bg{ fill:none; stroke: var(--line); stroke-width:10; }
+  .ring-fg{ fill:none; stroke-width:10; stroke-linecap:round; transition: stroke-dashoffset 1s linear; }
+  .ring-time{
+    position:absolute;
+    font-size:52px;
+    font-weight:800;
+    font-variant-numeric: tabular-nums;
+  }
+  .adjust-row{
+    display:flex;
+    gap:14px;
+    margin-top:10px;
+  }
+  .adjust-row button{
+    font-family:inherit;
+    background: var(--bg-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    font-size:14px;
+    font-weight:700;
+    padding:10px 18px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .overlay-caption{
+    margin-top:10px;
+    color:var(--text-dim);
+    font-size:14px;
+    text-align:center;
+  }
+  .overlay-actions{
+    display:flex;
+    gap:12px;
+    margin-top:12px;
+    margin-bottom:6px;
+    flex-shrink:0;
+  }
+  .link-btn{
+    background:none; border:none;
+    color:var(--text-dim);
+    font-family:inherit;
+    font-size:14px;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  /* settings modal */
+  .modal-backdrop{
+    position:fixed; inset:0;
+    background: rgba(10,15,13,.7);
+    display:none;
+    align-items:center; justify-content:center;
+    z-index:60;
+    padding:20px;
+  }
+  .modal-backdrop.show{ display:flex; }
+  .modal{
+    background: var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:26px;
+    width:100%;
+    max-width:440px;
+    max-height:85vh;
+    overflow-y:auto;
+  }
+  .modal h3{ font-size:18px; margin-bottom:18px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-size:13px; color:var(--text-dim); margin-bottom:8px; }
+  .field .row{ display:flex; align-items:center; gap:10px; }
+  .field input[type=number]{
+    width:70px;
+    background: var(--bg-3);
+    border:1px solid var(--line);
+    color: var(--text);
+    font-family:inherit;
+    font-size:15px;
+    padding:8px 10px;
+    border-radius:8px;
+    text-align:center;
+  }
+  .field textarea{
+    width:100%;
+    background: var(--bg-3);
+    border:1px solid var(--line);
+    color: var(--text);
+    font-family:inherit;
+    font-size:14px;
+    padding:10px;
+    border-radius:10px;
+    min-height:90px;
+    resize:vertical;
+    line-height:1.7;
+  }
+  .field small{ display:block; color:var(--text-dim); font-size:12px; margin-top:6px; line-height:1.6; }
+  .modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:8px;
+  }
+
+  @media (max-width:480px){
+    .topic-ar{ font-size:30px; }
+  }
+  @media (max-height:700px){
+    .overlay-topic{ margin-top:6px; }
+    .overlay-topic-name{ font-size:18px; margin-bottom:10px; }
+    .ring-wrap{ width:220px; height:220px; }
+    .ring-time{ font-size:44px; }
+    .adjust-row{ margin-top:10px; }
+    .overlay-caption{ margin-top:8px; font-size:13px; }
+    .overlay-actions{ margin-top:12px; margin-bottom:6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand">
+    <h1>احكي بقى</h1>
+    <div class="social-row">
+      <span class="made-by-label">صنعها</span>
+      <div class="icon-group">
+        <a class="made-by" href="https://www.instagram.com/anaswael_/" target="_blank" rel="noopener">
+          <span class="ig-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"></circle>
+            </svg>
+          </span>
+          <strong dir="ltr"><bdi>anaswael_</bdi></strong>
+        </a>
+        <a class="made-by" href="https://www.tiktok.com/@anaswael_/" target="_blank" rel="noopener">
+          <span class="ig-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16.6 5.82c-.98-.86-1.6-2.1-1.6-3.48h-3.09v12.4a2.59 2.59 0 0 1-2.6 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.67-3.01 3.38-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.75 5.7 5.69 5.7c3.13 0 5.69-2.55 5.69-5.7V9.01a7.34 7.34 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"></path>
+            </svg>
+          </span>
+          <strong dir="ltr"><bdi>anaswael_</bdi></strong>
+        </a>
+      </div>
+    </div>
+    <p>مواضيع اقتصاد سلوكي ونظرية ألعاب، تتمرن عليها من غير سكريبت</p>
+  </div>
+
+  <div class="modes">
+    <button id="modeOffCuff" class="active">من غير تحضير</button>
+    <button id="modeResearch">بحث الأول</button>
+  </div>
+
+  <div class="hint" id="hintText">دوس "دور" يطلعلك موضوع، وبعدين ابدأ توقيت الكلام على طول.</div>
+
+  <div class="category-select" id="categorySelect">
+    <button class="category-btn" id="categoryBtn" aria-haspopup="listbox" aria-expanded="false">
+      <span id="categoryBtnLabel">عام</span>
+      <span class="chevron">▾</span>
+    </button>
+    <div class="category-list" id="categoryList" role="listbox"></div>
+  </div>
+
+  <div class="status" id="statusLabel">جاهز</div>
+
+  <div class="topic-box" id="topicBox">
+    <div class="placeholder">دوس دور يطلعلك موضوع</div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="spinBtn">دور</button>
+    <button class="btn btn-secondary" id="startBtn" disabled>ابدأ</button>
+    <button class="copy-btn hidden" id="copyTopicBtn">انسخ الاسم</button>
+    <button class="icon-btn" id="soundBtn" title="الصوت" aria-label="تشغيل أو كتم الصوت">🔊</button>
+    <button class="icon-btn" id="mirrorBtn" title="وضع المرآة (للتيليبرومبتر)" aria-label="تفعيل وضع المرآة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="12" y1="3" x2="12" y2="21"></line>
+        <path d="M7 7l-3 5 3 5"></path>
+        <path d="M17 7l3 5-3 5"></path>
+      </svg>
+    </button>
+    <button class="icon-btn" id="settingsBtn" title="إعدادات" aria-label="فتح الإعدادات">⚙</button>
+  </div>
+
+  <input class="copy-fallback" id="copyFallbackInput" readonly>
+
+</div>
+
+<!-- TIMER OVERLAY -->
+<div class="overlay" id="timerOverlay">
+  <div class="overlay-topbar">
+    <button class="back-btn" id="ovBackBtn" aria-label="رجوع للشاشة الرئيسية">→ رجوع</button>
+    <button class="mirror-btn-ov" id="mirrorBtnOv" title="وضع المرآة" aria-label="تفعيل وضع المرآة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="12" y1="3" x2="12" y2="21"></line>
+        <path d="M7 7l-3 5 3 5"></path>
+        <path d="M17 7l3 5-3 5"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="overlay-topic" id="ovStage">البحث</div>
+  <div class="overlay-topic-name" id="ovTopic">—</div>
+
+  <div class="ring-wrap">
+    <svg viewBox="0 0 200 200">
+      <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+      <circle class="ring-fg" id="ringFg" cx="100" cy="100" r="90" stroke="#d2a24c"></circle>
+    </svg>
+    <div class="ring-time" id="ringTime">10:00</div>
+  </div>
+
+  <div class="adjust-row" id="adjustRow">
+    <button id="minus30">−0:30</button>
+    <button id="minus10">−0:10</button>
+    <button id="plus10">+0:10</button>
+    <button id="plus30">+0:30</button>
+  </div>
+
+  <div class="overlay-caption" id="ovCaption">هتتفرج على المصدر اللي حابه. دوس ابدأ لما تكون جاهز.</div>
+
+  <div class="overlay-actions">
+    <button class="btn btn-secondary" id="ovEndBtn">إنهاء</button>
+    <button class="btn btn-primary" id="ovStartPauseBtn">ابدأ</button>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h3>الإعدادات</h3>
+
+    <div class="field">
+      <label>وقت البحث (دقايق)</label>
+      <div class="row">
+        <input type="number" id="researchMinInput" min="1" max="30" value="10">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>وقت الكلام (ثواني)</label>
+      <div class="row">
+        <input type="number" id="speakSecInput" min="15" max="600" value="60">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>ضيف مواضيع بتاعتك</label>
+      <textarea id="customTopicsInput" placeholder="سطر لكل موضوع، مثلا:
+الاسم بالعربي | الاسم بالإنجليزي | جملة بداية"></textarea>
+      <small>كل سطر موضوع. تقدر تكتب الاسم بس، أو تفصل بـ | لو عايز تضيف الاسم الإنجليزي وجملة البداية.</small>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="settingsCancel">إلغاء</button>
+      <button class="btn btn-primary" id="settingsSave">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BUILT_IN_TOPICS = [
+  {cat:"consumer", ar:"تأثير الحل الوسط", en:"Compromise Effect", hook:"ليه دايمًا بتختار الخيار اللي في النص من غير ما تقارن كويس؟"},
+  {cat:"bias", ar:"مفارقة بيركسون", en:"Berkson's Paradox", hook:"ليه بتلاقي إن كل حاجة حلوة عندها عيب، وكل حاجة رخيصة وحشة؟"},
+  {cat:"bias", ar:"تحيز الناجين", en:"Survivorship Bias", hook:"ليه بنسمع بس عن اللي نجحوا، ومبنشوفش اللي فشلوا بنفس الطريقة؟"},
+  {cat:"social", ar:"تأثير العثرة", en:"Pratfall Effect", hook:"ليه لما حد كامل يغلط غلطة بسيطة بتحبه أكتر؟"},
+  {cat:"bias", ar:"وهم الشفافية", en:"Illusion of Transparency", hook:"ليه حاسس إن اللي جواك باين على وشك أكتر مما هو فعلاً؟"},
+  {cat:"bias", ar:"لعنة المعرفة", en:"Curse of Knowledge", hook:"ليه صعب توصّل حاجة إنت فاهمها كويس لحد لسه ما يعرفهاش؟"},
+  {cat:"social", ar:"الجهل الجماعي", en:"Pluralistic Ignorance", hook:"ليه كل الناس في القاعة ساكتة، وكل واحد فيهم فاكر إنه الوحيد اللي مش فاهم؟"},
+  {cat:"bias", ar:"تأثير زيجارنيك", en:"Zeigarnik Effect", hook:"ليه فكرة ناقصة بتفضل عالقة في دماغك أكتر من فكرة خلصتها؟"},
+  {cat:"consumer", ar:"تأثير ديدرو", en:"Diderot Effect", hook:"ليه لما تشتري حاجة جديدة بتحس إن كل اللي حواليها لازم يتغير كمان؟"},
+  {cat:"consumer", ar:"التقييم الآني للمستقبل", en:"Hyperbolic Discounting", hook:"ليه بتختار المتعة دلوقتي حتى لو عارف إنها هتكلفك أكتر بكرة؟"},
+  {cat:"consumer", ar:"تأثير الامتلاك", en:"Endowment Effect", hook:"ليه الحاجة بتاعتك بتحس إنها تستاهل أكتر لما تيجي تبيعها؟"},
+  {cat:"consumer", ar:"إرهاق الاختيارات", en:"Choice Overload", hook:"ليه كل ما الخيارات تزيد، بتحس إنك مش قادر تختار أصلاً؟"},
+  {cat:"game", ar:"لعنة الفائز", en:"Winner's Curse", hook:"ليه اللي بيكسب المزاد غالبًا بيكون هو اللي دفع زيادة عن قيمة الحاجة؟"},
+  {cat:"social", ar:"الانحدار المعلوماتي", en:"Information Cascades", hook:"ليه بتتبع القرار اللي كل الناس عملاه حتى لو معلوماتك بتقولك حاجة تانية؟"},
+  {cat:"bias", ar:"وهم التركيز", en:"Focusing Illusion", hook:"ليه فاكر إن حاجة واحدة هتغيّر حياتك كلها لو حصلت؟"},
+  {cat:"social", ar:"قانون باركنسون للتفاهات", en:"Law of Triviality", hook:"ليه الاجتماعات بتاخد وقت أطول في مناقشة أصغر التفاصيل؟"},
+  {cat:"consumer", ar:"تأثير إيكيا", en:"IKEA Effect", hook:"ليه الحاجة اللي إنت ركبتها بإيدك بتحبها أكتر من اللي جاهزة؟"},
+  {cat:"bias", ar:"الترخيص الأخلاقي", en:"Moral Licensing", hook:"ليه بعد ما تعمل حاجة كويسة بتحس إنك مسموحلك تعمل حاجة مش كويسة؟"},
+  {cat:"bias", ar:"تأثير كشاف الضوء", en:"Spotlight Effect", hook:"ليه حاسس إن كل الناس واخدة بالها منك، وهما أصلاً مش شايفينك؟"},
+  {cat:"bias", ar:"إهمال المعدل الأساسي", en:"Base Rate Neglect", hook:"ليه بتتأثر بقصة واحدة أكتر من الأرقام اللي بتقول العكس؟"},
+  {cat:"social", ar:"تأثير بيلتزمان", en:"Peltzman Effect", hook:"ليه لما تحس إنك آمن أكتر، بتاخد مخاطر أكتر؟"},
+  {cat:"game", ar:"نقطة شيلينج", en:"Schelling Point", hook:"ليه اتفقتوا على مكان اللقاء من غير ما تكلموا بعض أصلاً؟"},
+  {cat:"consumer", ar:"تأثير التعرض المتكرر", en:"Mere Exposure Effect", hook:"ليه أغنية كنت بتكرهها بقيت من أحسن الأغاني بعد ما سمعتها كتير؟"},
+  {cat:"social", ar:"قانون جودهارت", en:"Goodhart's Law", hook:"ليه لما مقياس معين يبقى هدف، بيبطل يبقى مقياس كويس؟"},
+  {cat:"game", ar:"نظرية الإشارة المكلفة", en:"Costly Signaling", hook:"ليه بنصدق حد بيضحي بحاجة غالية أكتر من حد بيقول كلام بس؟"},
+  {cat:"game", ar:"عدم تماثل المعلومات", en:"Asymmetric Information", hook:"ليه البياع عارف عن السلعة أكتر منك بكتير وإنت مش حاسس؟"},
+  {cat:"game", ar:"تقنية القدم في الباب", en:"Foot-in-the-Door", hook:"ليه لو وافقت على طلب صغير، بتلاقي نفسك موافق على طلب أكبر بعده؟"},
+  {cat:"game", ar:"أثر الرسو", en:"Anchoring Effect", hook:"ليه أول رقم بتسمعه في التفاوض بيتحكم في كل الأرقام اللي بعده؟"},
+  {cat:"game", ar:"توازن ناش", en:"Nash Equilibrium", hook:"ليه في مواقف كتير محدش بيغيّر قراره حتى لو مش الأفضل ليه؟"},
+  {cat:"game", ar:"لعبة الإنذار", en:"Ultimatum Game", hook:"ليه بترفض فلوس مجانية لو حسيت إن التقسيمة مش عادلة؟"},
+  {cat:"social", ar:"مفارقة أبيلين", en:"Abilene Paradox", hook:"ليه بتوافق على خطة محدش فيكم عايزها فعلاً؟"},
+  {cat:"social", ar:"تأثير بن فرانكلين", en:"Ben Franklin Effect", hook:"ليه حد عمل معروف ليك بيحبك أكتر بعدها، مش العكس؟"},
+  {cat:"bias", ar:"الانحياز للحالة الراهنة", en:"Status Quo Bias", hook:"ليه بتفضل تسيب الحاجة زي ما هي حتى لو التغيير أحسن؟"},
+  {cat:"consumer", ar:"تأثير الرقم المرجعي", en:"Anchoring", hook:"ليه أول سعر تشوفه بيفضل عالق في دماغك وإنت بتفاصل؟"},
+  {cat:"bias", ar:"القمار الغارق", en:"Sunk Cost Fallacy", hook:"ليه بتكمل في حاجة عارف إنها فاشلة، بس عشان دفعت فيها فلوس؟"},
+  {cat:"social", ar:"تأثير الرافعة الاجتماعية", en:"Social Proof", hook:"ليه بتقف في الطابور الأطول من غير ما تعرف هو طابور لإيه؟"},
+  {cat:"game", ar:"معضلة السجينين", en:"Prisoner's Dilemma", hook:"ليه اتنين عاقلين ممكن ياخدوا قرار يضر الاتنين؟"},
+  {cat:"game", ar:"مأساة المشاع", en:"Tragedy of the Commons", hook:"ليه حاجة مفيدة للكل بتتبهدل لما محدش يحس إنها ملكه؟"},
+  {cat:"bias", ar:"تأثير الألفة الزايدة", en:"Familiarity Backfire Effect", hook:"ليه تكرار تفنيد شائعة ممكن يخليها تنتشر أكتر؟"},
+  {cat:"bias", ar:"العمى الاختياري", en:"Choice-Supportive Bias", hook:"ليه بعد ما تختار حاجة بتلاقي نفسك بتدافع عنها حتى لو غلط؟"},
+  {cat:"bias", ar:"تأثير الإطار", en:"Framing Effect", hook:"ليه نفس الخبر بالظبط بيحسسك مختلف لو اتقال بطريقة تانية؟"},
+  {cat:"social", ar:"نظرية الإشارة في سوق الشغل", en:"Signaling in Job Markets", hook:"ليه الشهادة مش دايمًا عن اللي اتعلمته، لكن عن اللي قدرت تكمله؟"},
+  {cat:"game", ar:"الاختيار العكسي", en:"Adverse Selection", hook:"ليه شركات التأمين خايفة من اللي بيدوروا عليها أكتر من غيرهم؟"},
+  {cat:"game", ar:"خطر أخلاقي", en:"Moral Hazard", hook:"ليه لما تبقى محمي من نتيجة قرارك، بتاخد قرارات أخطر؟"},
+  {cat:"consumer", ar:"تأثير القافلة", en:"Bandwagon Effect", hook:"ليه بتحب حاجة أكتر لما تعرف إن ناس كتير بتحبها؟"},
+  {cat:"bias", ar:"وهم السيطرة", en:"Illusion of Control", hook:"ليه حاسس إنك بتتحكم في نرد اللعب وإنت بترميه بقوة؟"},
+  {cat:"bias", ar:"تأثير دانينج-كروجر", en:"Dunning-Kruger Effect", hook:"ليه أقل واحد فاهم في حاجة، بيكون أكتر واحد واثق فيها؟"},
+  {cat:"consumer", ar:"القاعدة العشرية", en:"Decoy Effect", hook:"ليه ضيفوا حجم وسط في المنيو مش حد بيطلبه أصلاً؟"},
+  {cat:"social", ar:"تأثير باربرا سترايسند", en:"Streisand Effect", hook:"ليه محاولتك تخبي حاجة بتخليها تنتشر أكتر؟"},
+  {cat:"social", ar:"القانون الحديدي للمكافأة", en:"Perverse Incentives", hook:"ليه مكافأة موظف على عدد المكالمات بتخلي المكالمات أسوأ؟"},
+  {cat:"bias", ar:"تأثير الاتساق", en:"Consistency Bias", hook:"ليه بتفضل تصر على رأيك القديم حتى لو الدليل اتغير؟"},
+  {cat:"bias", ar:"انحياز التأكيد", en:"Confirmation Bias", hook:"ليه بتدور بس على الأخبار اللي بتأكد اللي إنت مقتنع بيه أصلاً؟"},
+  {cat:"social", ar:"تأثير الملاحظ", en:"Hawthorne Effect", hook:"ليه أداءك بيتحسن لمجرد إنك حاسس إن حد بيراقبك؟"},
+  {cat:"consumer", ar:"نظرية التوقعات", en:"Prospect Theory", hook:"ليه وجع خسارة ١٠٠ جنيه أكبر من فرحة كسب ١٠٠ جنيه؟"},
+  {cat:"consumer", ar:"مفارقة الاختيار", en:"Paradox of Choice", hook:"ليه كتر الاختيارات بيخليك نادم على اللي اخترته أكتر مش أقل؟"}
+];
+
+const OFFCUFF_TOPICS = [
+  {cat:"oc_tech", ar:"البرين روت", en:"Brainrot", hook:"ليه مبقاش قادر تركز على حاجة واحدة أكتر من ٣٠ ثانية؟"},
+  {cat:"oc_fitness", ar:"الذاكرة العضلية", en:"Muscle Memory", hook:"إزاي جسمك بيتذكر حركة عملتها ألف مرة من غير ما تفكر فيها؟"},
+  {cat:"oc_money", ar:"الأسهم", en:"Stocks", hook:"ليه بتشيك على المحفظة كل شوية حتى لو مش ناوي تبيع؟"},
+  {cat:"oc_food", ar:"الأكل الفاضل", en:"Leftovers", hook:"ليه أكل امبارح طعمه بيبقى أحلى من الطازة أحيانًا؟"},
+  {cat:"oc_work", ar:"المشوار للشغل", en:"Commute", hook:"إيه اللي بتفكر فيه وإنت واقف في الزحمة كل يوم؟"},
+  {cat:"oc_work", ar:"تأجيل المهام", en:"Procrastination", hook:"ليه بتأجل المهمة السهلة وتعمل الصعبة الأول؟"},
+  {cat:"oc_tech", ar:"إدمان الموبايل", en:"Phone Addiction", hook:"ليه بتفتح الموبايل من غير ما تحس إنك فتحته؟"},
+  {cat:"oc_work", ar:"أول يوم في الشغل", en:"First Day at Work", hook:"إيه أكتر حاجة كانت غريبة في أول يوم ليك في شغل جديد؟"},
+  {cat:"oc_fitness", ar:"مواعيد النوم", en:"Sleep Schedule", hook:"ليه بتقول هتنام بدري وبعدين تصحى الساعة ٢ بالليل؟"},
+  {cat:"oc_fitness", ar:"الجيم والكسل", en:"Gym Motivation", hook:"ليه أصعب حاجة في الجيم هي إنك تدخل بابه؟"},
+  {cat:"oc_money", ar:"توفير الفلوس", en:"Saving Money", hook:"ليه بتوفر فلوس عشان حاجة، وبعدين تصرفها في حاجة تانية؟"},
+  {cat:"oc_money", ar:"مشروع جانبي", en:"Side Hustle Idea", hook:"إيه أغرب فكرة مشروع فكرت فيها وإنت مستني في طابور؟"},
+  {cat:"oc_food", ar:"روتين القهوة", en:"Coffee Routine", hook:"ليه القهوة بتاعتك لازم تبقى بالطريقة دي بالظبط؟"},
+  {cat:"oc_social", ar:"جروب العيلة", en:"Family Group Chat", hook:"ليه جروب العيلة أكتر جروب فيه نوتيفيكيشن؟"},
+  {cat:"oc_work", ar:"ضغط الديدلاين", en:"Deadline Pressure", hook:"ليه شغلك بيتحسن لما يكون باقي ساعتين بس على الديدلاين؟"},
+  {cat:"oc_social", ar:"أغنية علقت في دماغك", en:"Song Stuck in Your Head", hook:"ليه أغنية سمعتها مرة واحدة بس فاضلة عالقة في دماغك يومين؟"},
+  {cat:"oc_tech", ar:"تصفح من غير هدف", en:"Doomscrolling", hook:"بتفضل تتصفح إيه من غير ما تحس إنك بتدور على حاجة أصلاً؟"},
+  {cat:"oc_money", ar:"أول مرتب", en:"First Salary", hook:"أول حاجة عملتها بأول مرتب ليك كانت إيه؟"},
+  {cat:"oc_work", ar:"اجتماع كان ممكن يبقى إيميل", en:"Meeting That Should've Been an Email", hook:"أطول اجتماع حضرته ومكنش لازم يحصل أصلاً كان عن إيه؟"},
+  {cat:"oc_fitness", ar:"تمرين مش بتحبه بس بتعمله", en:"Exercise You Hate but Do", hook:"إيه التمرين اللي بتكرهه بس بتعمله عشان مفيش بديل؟"},
+  {cat:"oc_social", ar:"حلم غريب", en:"Weird Dream", hook:"احكيلي عن أغرب حلم فكرت فيه لما صحيت منه؟"},
+  {cat:"oc_money", ar:"أول استثمار", en:"First Investment", hook:"أول قرار استثمار غلط عملته كان إيه؟"},
+  {cat:"oc_food", ar:"الوجبة اللي بتطلبها كل مرة", en:"Same Order Every Time", hook:"ليه بتطلب نفس الأكلة في نفس المطعم كل مرة؟"},
+  {cat:"oc_tech", ar:"تطبيق مبتقدرش تعيش من غيره", en:"App You Can't Live Without", hook:"إيه التطبيق اللي لو اتشال من موبايلك هتحس إن يومك ضاع؟"},
+  {cat:"oc_work", ar:"حاجة اتعلمتها من أول شهر شغل", en:"Lesson From Your First Month at Work", hook:"إيه أهم حاجة اتعلمتها في أول شهر ليك في الشغل؟"},
+  {cat:"oc_social", ar:"وقت الطابور", en:"Waiting in Line", hook:"بتعمل إيه بدماغك وإنت واقف في طابور طويل؟"},
+  {cat:"oc_work", ar:"أول مقابلة شغل", en:"First Job Interview", hook:"احكيلي عن أغرب سؤال اتسألته في مقابلة شغل؟"},
+  {cat:"oc_social", ar:"حاجة بتأجلها من سنين", en:"Something You've Postponed for Years", hook:"إيه الحاجة اللي بتقول هتعملها وباقيلها سنين؟"},
+  {cat:"oc_work", ar:"اجازة الأسبوع", en:"Weekend Plans", hook:"يوم الجمعة بتحس بإيه بالظبط وإنت لسه في السرير؟"},
+  {cat:"oc_work", ar:"تقييم الأداء", en:"Performance Review", hook:"إيه أغرب فيدباك اتقاله لك في تقييم أداء؟"},
+  {cat:"oc_work", ar:"زمايل الشغل", en:"Coworkers", hook:"إيه الفرق بين زميل الشغل وصديق الشغل؟"},
+  {cat:"oc_work", ar:"الشغل من البيت", en:"Working From Home", hook:"ليه صعب تركز في الشغل من البيت أكتر من المكتب أحيانًا؟"},
+  {cat:"oc_work", ar:"الترقية", en:"Getting Promoted", hook:"إيه أول حاجة حسيتها لما اتترقيت أو حد قدامك اتترقى؟"},
+  {cat:"oc_work", ar:"الاستقالة", en:"Quitting a Job", hook:"إيه اللحظة اللي حسيت فيها إنك لازم تسيب الشغل ده؟"},
+  {cat:"oc_work", ar:"إيميل مبيتردش عليه", en:"The Unanswered Email", hook:"ليه بتفضل تأجل الرد على إيميل بسيط لأيام؟"},
+  {cat:"oc_work", ar:"الخط الفاصل بين الشغل والحياة", en:"Work-Life Balance", hook:"إمتى آخر مرة حسيت إن الشغل خد وقت مكنش لازم ياخده؟"},
+  {cat:"oc_work", ar:"أول مشروع كبير", en:"Your First Big Project", hook:"إيه أول مشروع كبير اتحمّلت مسؤوليته في الشغل؟"},
+  {cat:"oc_work", ar:"اجتماع الصبح بدري", en:"Early Morning Meeting", hook:"ليه اجتماع الساعة ٩ الصبح بيحس وكأنه ٦ الفجر؟"},
+  {cat:"oc_work", ar:"فريق شغل صعب", en:"A Difficult Team", hook:"إيه أصعب موقف مريت بيه مع فريق شغل؟"},
+  {cat:"oc_work", ar:"الفريلانس", en:"Freelancing", hook:"إيه الفرق اللي حسيته بين شغل ثابت وشغل فريلانس؟"},
+  {cat:"oc_work", ar:"استراحة الغدا", en:"Lunch Break", hook:"بتعمل إيه بالظبط في استراحة الغدا عشان تصفي دماغك؟"},
+  {cat:"oc_food", ar:"الدايت", en:"Being on a Diet", hook:"إيه أصعب لحظة بتقاوم فيها الأكل وإنت عامل دايت؟"},
+  {cat:"oc_food", ar:"الطبخ من غير وصفة", en:"Cooking Without a Recipe", hook:"إيه أول أكلة عرفت تعملها من غير ما تبص على وصفة؟"},
+  {cat:"oc_food", ar:"الفطار المفضل", en:"Favorite Breakfast", hook:"لو هتاكل نفس الفطار كل يوم بقية حياتك، هيبقى إيه؟"},
+  {cat:"oc_food", ar:"الأكل بره البيت", en:"Eating Out", hook:"ليه بتحس إن الأكل بره طعمه أحلى حتى لو مش أحسن؟"},
+  {cat:"oc_food", ar:"حلويات نص الليل", en:"Midnight Snacking", hook:"ليه الأكل الساعة ٣ بالليل طعمه مختلف تمامًا؟"},
+  {cat:"oc_food", ar:"شاي ولا قهوة", en:"Tea or Coffee", hook:"إيه اللي بيخليك تختار الشاي على القهوة أو العكس؟"},
+  {cat:"oc_food", ar:"عزومة العيلة", en:"A Family Meal Gathering", hook:"إيه اللي بيحصل دايمًا في عزومة العيلة من غير ما حد يتفق عليه؟"},
+  {cat:"oc_fitness", ar:"الجري", en:"Running", hook:"إيه اللي بيدور في دماغك وإنت بتجري؟"},
+  {cat:"oc_fitness", ar:"يوم الرجل في الجيم", en:"Leg Day", hook:"ليه يوم الرجل هو أكتر يوم الكل بيهرب منه؟"},
+  {cat:"oc_fitness", ar:"المكملات الغذائية", en:"Supplements", hook:"إيه رأيك الحقيقي في المكملات الغذائية؟"},
+  {cat:"oc_fitness", ar:"شرب الميه", en:"Drinking Water", hook:"ليه صعب تفتكر تشرب ميه كفاية طول اليوم؟"},
+  {cat:"oc_fitness", ar:"الوزن والميزان", en:"Weighing Yourself", hook:"ليه بعض الأيام بتخاف تقف على الميزان؟"},
+  {cat:"oc_fitness", ar:"كارديو ولا حديد", en:"Cardio or Weights", hook:"إيه اللي بيخليك تختار الكارديو على الحديد أو العكس؟"},
+  {cat:"oc_fitness", ar:"إصابة رياضية", en:"A Sports Injury", hook:"إيه أسوأ إصابة وقفتك عن الرياضة فترة؟"},
+  {cat:"oc_fitness", ar:"رياضة الصبح بدري", en:"Morning Workouts", hook:"إيه اللي بيخليك تقرر تصحى بدري عشان تتمرن؟"},
+  {cat:"oc_money", ar:"الميزانية الشهرية", en:"Monthly Budget", hook:"ليه الميزانية بتخلص قبل آخر الشهر بأيام كتير؟"},
+  {cat:"oc_money", ar:"شراء حاجة غالية", en:"Buying Something Expensive", hook:"إيه آخر حاجة غالية اشتريتها وفكرت فيها كتير قبلها؟"},
+  {cat:"oc_money", ar:"الدين", en:"Being in Debt", hook:"إزاي بتحس وإنت مديون لحد، حتى لو المبلغ بسيط؟"},
+  {cat:"oc_money", ar:"بونص الشغل", en:"A Work Bonus", hook:"أول حاجة فكرت تعملها لما استلمت بونص كان إيه؟"},
+  {cat:"oc_money", ar:"الشراء بالتقسيط", en:"Buying on Installments", hook:"ليه التقسيط بيحسسك إن السعر أرخص حتى لو مش كده؟"},
+  {cat:"oc_money", ar:"العملة الرقمية", en:"Crypto", hook:"إيه رأيك الحقيقي في العملات الرقمية؟"},
+  {cat:"oc_money", ar:"التأمين", en:"Insurance", hook:"ليه بتشتري تأمين وإنت مقتنع إنك مش هتحتاجه؟"},
+  {cat:"oc_money", ar:"زيادة الأسعار", en:"Rising Prices", hook:"إيه أكتر حاجة حسيت إن سعرها زاد بجنون؟"},
+  {cat:"oc_tech", ar:"الذكاء الاصطناعي", en:"Artificial Intelligence", hook:"إيه أول حاجة استخدمت فيها الذكاء الاصطناعي في حياتك؟"},
+  {cat:"oc_tech", ar:"باسورد نسيته", en:"A Forgotten Password", hook:"إيه أكتر حساب نسيت الباسورد بتاعه وسبته؟"},
+  {cat:"oc_tech", ar:"تحديث الموبايل", en:"A Phone Update", hook:"ليه بتأجل تحديث الموبايل لحد ما يبقى إجباري؟"},
+  {cat:"oc_tech", ar:"بطارية الموبايل بتخلص", en:"Phone Battery Dying", hook:"إزاي بتحس لما تشوف البطارية ١٠٪ ومعاك مش شاحن؟"},
+  {cat:"oc_tech", ar:"خوارزمية السوشيال ميديا", en:"The Social Media Algorithm", hook:"إزاي حاسس إن الخوارزمية عارفاك أكتر من نفسك؟"},
+  {cat:"oc_tech", ar:"إشعارات مالهاش لازمة", en:"Useless Notifications", hook:"إيه أكتر تطبيق بيبعتلك إشعارات مالهاش لازمة؟"},
+  {cat:"oc_tech", ar:"فيديو اتفرجت عليه كتير", en:"A Video You Rewatched Too Many Times", hook:"إيه فيديو اتفرجت عليه أكتر من ١٠ مرات؟"},
+  {cat:"oc_social", ar:"صديق الطفولة", en:"A Childhood Friend", hook:"لسه فاكر آخر مرة اتكلمت فيها مع صديق طفولتك؟"},
+  {cat:"oc_social", ar:"لمة الأصحاب", en:"Hanging Out With Friends", hook:"إيه اللي بيميز لمة الأصحاب القدام عن أي لمة تانية؟"},
+  {cat:"oc_social", ar:"موقف اجتماعي محرج", en:"An Awkward Social Moment", hook:"إيه أكتر موقف محرج حصلك قدام ناس؟"},
+  {cat:"oc_social", ar:"أول انطباع", en:"A First Impression", hook:"إمتى غيّرت رأيك في حد كليًا بعد أول انطباع؟"},
+  {cat:"oc_social", ar:"الرجوع للبيت", en:"Going Back Home", hook:"إزاي بتحس أول ما تدخل بيت أهلك بعد غيبة طويلة؟"},
+  {cat:"oc_social", ar:"نصيحة اتجاهلتها", en:"Advice You Ignored", hook:"إيه نصيحة اتقالت لك وما اخدتش بيها وندمت بعدين؟"},
+  {cat:"oc_social", ar:"حفلة عيد ميلاد", en:"A Birthday Party", hook:"إيه أحلى عيد ميلاد احتفلت بيه في حياتك؟"},
+  {cat:"oc_social", ar:"السفر لوحدك", en:"Traveling Alone", hook:"إيه اللي بيخوفك أو بيعجبك في فكرة إنك تسافر لوحدك؟"},
+  {cat:"oc_social", ar:"حد غيّر طريقة تفكيرك", en:"Someone Who Changed How You Think", hook:"مين أكتر حد غيّر طريقة تفكيرك في حاجة معينة؟"}
+];
+
+const el = id => document.getElementById(id);
+
+let allTopics = [...BUILT_IN_TOPICS];
+let usedIndices = [];
+let currentCategory = 'all';
+
+const CATEGORIES = [
+  {id:'all', label:'عام'},
+  {id:'bias', label:'تحيزات معرفية'},
+  {id:'game', label:'نظرية الألعاب والتفاوض'},
+  {id:'consumer', label:'قرارات المستهلك'},
+  {id:'social', label:'السلوك في الشغل والمجتمع'}
+];
+
+const OFFCUFF_CATEGORIES = [
+  {id:'all', label:'عام'},
+  {id:'oc_work', label:'الشغل والمشوار'},
+  {id:'oc_food', label:'الأكل'},
+  {id:'oc_fitness', label:'الرياضة والجسم'},
+  {id:'oc_money', label:'الفلوس'},
+  {id:'oc_tech', label:'السوشيال ميديا والتكنولوجيا'},
+  {id:'oc_social', label:'يوميات وناس'}
+];
+
+function categoriesForMode(){
+  return mode === 'offcuff' ? OFFCUFF_CATEGORIES : CATEGORIES;
+}
+
+function renderCategoryList(){
+  const list = el('categoryList');
+  const cats = categoriesForMode();
+  list.innerHTML = cats.map(c =>
+    `<button class="category-option${c.id===currentCategory?' selected':''}" data-cat="${c.id}" role="option">${c.label}</button>`
+  ).join('');
+  list.querySelectorAll('.category-option').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentCategory = btn.dataset.cat;
+      el('categoryBtnLabel').textContent = cats.find(c=>c.id===currentCategory).label;
+      usedIndices = [];
+      renderCategoryList();
+      closeCategoryDropdown();
+      playClick();
+    });
+  });
+}
+
+function closeCategoryDropdown(){
+  el('categorySelect').classList.remove('open');
+  el('categoryBtn').setAttribute('aria-expanded','false');
+}
+
+el('categoryBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  const sel = el('categorySelect');
+  const willOpen = !sel.classList.contains('open');
+  sel.classList.toggle('open');
+  el('categoryBtn').setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+});
+document.addEventListener('click', (e)=>{
+  if(!el('categorySelect').contains(e.target)) closeCategoryDropdown();
+});
+
+function basePoolForMode(){
+  return mode === 'offcuff' ? OFFCUFF_TOPICS : allTopics;
+}
+
+function topicsInCategory(){
+  const base = basePoolForMode();
+  if(currentCategory === 'all') return base;
+  return base.filter(t => t.cat === currentCategory || !t.cat);
+}
+let currentTopic = null;
+let mode = 'offcuff'; // 'offcuff' | 'research'
+renderCategoryList();
+let settings = { researchMin: 10, speakSec: 60 };
+
+let timerInterval = null;
+let timerSecondsLeft = 0;
+let timerTotal = 0;
+let timerStage = null; // 'research' | 'speak'
+let soundOn = true;
+let beepedAt = null;
+let hasStarted = false;
+
+// ---------- sound engine (synthesized, no audio files) ----------
+let audioCtx = null;
+function getCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function tone(freq, duration, opts={}){
+  if(!soundOn) return;
+  const ctx = getCtx();
+  const t0 = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = opts.type || 'sine';
+  osc.frequency.setValueAtTime(freq, t0);
+  if(opts.slideTo) osc.frequency.exponentialRampToValueAtTime(opts.slideTo, t0+duration);
+  const vol = opts.vol!=null ? opts.vol : 0.18;
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(vol, t0+0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+duration);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0+duration+0.02);
+}
+
+function playTick(){ tone(720, 0.05, {type:'square', vol:0.28}); }
+
+function playLand(){
+  tone(392, 0.11, {type:'triangle', vol:0.42});
+  setTimeout(()=> tone(587, 0.2, {type:'triangle', vol:0.46}), 90);
+}
+
+function playBeep(){ tone(880, 0.11, {type:'sine', vol:0.42}); }
+
+function playAlarm(){
+  const ctx = getCtx();
+  const t0 = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(220, t0);
+  const vol = soundOn ? 0.35 : 0;
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(vol, t0+0.02);
+  gain.gain.setValueAtTime(vol, t0+0.18);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.22);
+  gain.gain.setValueAtTime(0.0001, t0+0.3);
+  gain.gain.exponentialRampToValueAtTime(vol, t0+0.32);
+  gain.gain.setValueAtTime(vol, t0+0.5);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.54);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  if(!soundOn) return;
+  osc.start(t0);
+  osc.stop(t0+0.6);
+}
+
+function playClick(){ tone(500, 0.04, {type:'sine', vol:0.2}); }
+
+function updateSoundBtn(){
+  el('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+}
+
+// ---------- storage abstraction: uses Claude's window.storage when available, falls back to localStorage for a standalone deploy ----------
+async function storageGet(key){
+  if(window.storage){
+    try{ return await window.storage.get(key); }catch(e){ return null; }
+  }
+  const v = localStorage.getItem(key);
+  return v!==null ? {value:v} : null;
+}
+async function storageSet(key, value){
+  if(window.storage){
+    try{ return await window.storage.set(key, value); }catch(e){ return null; }
+  }
+  try{ localStorage.setItem(key, value); }catch(e){}
+}
+
+// ---------- storage ----------
+async function loadState(){
+  try{
+    const s = await storageGet('ehky-settings');
+    if(s && s.value){
+      const parsed = JSON.parse(s.value);
+      if(parsed.researchMin) settings.researchMin = parsed.researchMin;
+      if(parsed.speakSec) settings.speakSec = parsed.speakSec;
+      if(typeof parsed.soundOn === 'boolean') soundOn = parsed.soundOn;
+      if(typeof parsed.mirrorOn === 'boolean') mirrorOn = parsed.mirrorOn;
+    }
+  }catch(e){}
+  updateSoundBtn();
+  document.body.classList.toggle('mirrored', mirrorOn);
+  updateMirrorBtns();
+  try{
+    const c = await storageGet('ehky-custom-topics');
+    if(c && c.value){
+      const custom = JSON.parse(c.value);
+      if(Array.isArray(custom)) allTopics = [...BUILT_IN_TOPICS, ...custom];
+    }
+  }catch(e){}
+  el('researchMinInput').value = settings.researchMin;
+  el('speakSecInput').value = settings.speakSec;
+  updateTopicCount();
+}
+
+async function saveSettings(researchMin, speakSec, customTopics){
+  settings.researchMin = researchMin;
+  settings.speakSec = speakSec;
+  settings.soundOn = soundOn;
+  await storageSet('ehky-settings', JSON.stringify(settings));
+  await storageSet('ehky-custom-topics', JSON.stringify(customTopics));
+}
+
+el('soundBtn').addEventListener('click', async ()=>{
+  soundOn = !soundOn;
+  updateSoundBtn();
+  if(soundOn) playClick();
+  try{
+    settings.soundOn = soundOn;
+    await storageSet('ehky-settings', JSON.stringify(settings));
+  }catch(e){}
+});
+
+// ---------- mirror mode (for teleprompter mirror rigs) ----------
+let mirrorOn = false;
+function updateMirrorBtns(){
+  el('mirrorBtn').classList.toggle('active', mirrorOn);
+  el('mirrorBtnOv').classList.toggle('active', mirrorOn);
+}
+async function toggleMirror(){
+  mirrorOn = !mirrorOn;
+  document.body.classList.toggle('mirrored', mirrorOn);
+  updateMirrorBtns();
+  playClick();
+  try{
+    settings.mirrorOn = mirrorOn;
+    await storageSet('ehky-settings', JSON.stringify(settings));
+  }catch(e){}
+}
+el('mirrorBtn').addEventListener('click', toggleMirror);
+el('mirrorBtnOv').addEventListener('click', toggleMirror);
+
+function updateTopicCount(){
+}
+
+// ---------- mode toggle ----------
+el('modeOffCuff').addEventListener('click', ()=>{
+  mode='offcuff';
+  el('modeOffCuff').classList.add('active');
+  el('modeResearch').classList.remove('active');
+  el('hintText').textContent = 'دوس "دور" يطلعلك موضوع بسيط، وبعدين ابدأ توقيت الكلام على طول.';
+  el('startBtn').textContent = 'ابدأ';
+  currentCategory = 'all';
+  usedIndices = [];
+  el('categoryBtnLabel').textContent = 'عام';
+  renderCategoryList();
+  el('categorySelect').style.display = 'flex';
+  currentTopic = null;
+  el('startBtn').disabled = true;
+  el('topicBox').innerHTML = '<div class="placeholder">دوس دور يطلعلك موضوع</div>';
+  el('copyTopicBtn').classList.add('hidden');
+  el('copyFallbackInput').classList.remove('show');
+});
+el('modeResearch').addEventListener('click', ()=>{
+  mode='research';
+  el('modeResearch').classList.add('active');
+  el('modeOffCuff').classList.remove('active');
+  el('hintText').textContent = 'دوس "دور"، هتاخد وقت تبحث في الموضوع، وبعدين تتكلم من غير ما تقرا.';
+  el('startBtn').textContent = `ابدأ البحث ${settings.researchMin} دقايق`;
+  currentCategory = 'all';
+  usedIndices = [];
+  closeCategoryDropdown();
+  el('categorySelect').style.display = 'none';
+  currentTopic = null;
+  el('startBtn').disabled = true;
+  el('topicBox').innerHTML = '<div class="placeholder">دوس دور يطلعلك موضوع</div>';
+  el('copyTopicBtn').classList.add('hidden');
+  el('copyFallbackInput').classList.remove('show');
+});
+
+// ---------- spin ----------
+el('spinBtn').addEventListener('click', spin);
+
+function spin(){
+  const pool = topicsInCategory();
+  if(pool.length===0) return;
+  el('spinBtn').disabled = true;
+  el('startBtn').disabled = true;
+  el('statusLabel').textContent = 'بيدور...';
+
+  if(usedIndices.length >= pool.length) usedIndices = [];
+
+  let available = pool.map((_,i)=>i).filter(i=>!usedIndices.includes(i));
+  const finalIndex = available[Math.floor(Math.random()*available.length)];
+
+  let ticks = 0;
+  const maxTicks = 26;
+  const box = el('topicBox');
+
+  function tick(){
+    const randTopic = pool[Math.floor(Math.random()*pool.length)];
+    renderTopic(randTopic, true);
+    playTick();
+    ticks++;
+    if(ticks < maxTicks){
+      setTimeout(tick, 28 + ticks*5);
+    }else{
+      currentTopic = pool[finalIndex];
+      usedIndices.push(finalIndex);
+      renderTopic(currentTopic, false);
+      playLand();
+      el('statusLabel').textContent = 'جاهز';
+      el('spinBtn').disabled = false;
+      el('startBtn').disabled = false;
+      el('startBtn').textContent = mode==='offcuff' ? 'ابدأ' : `ابدأ البحث ${settings.researchMin} دقايق`;
+    }
+  }
+  tick();
+}
+
+async function copyText(text){
+  // primary: modern clipboard API (requires https / secure context and page focus)
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(e){}
+  // fallback: legacy hidden-textarea + execCommand, works in more restricted contexts
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if(ok) return true;
+  }catch(e){}
+  return false;
+}
+
+function renderTopic(t, spinning){
+  const box = el('topicBox');
+  if(spinning){
+    box.innerHTML = `<div class="topic-ar">${t.ar}</div>`;
+    el('copyTopicBtn').classList.add('hidden');
+    el('copyFallbackInput').classList.remove('show');
+  }else{
+    box.innerHTML = `
+      <div class="topic-ar">${t.ar}</div>
+      ${t.en ? `<div class="topic-en">${t.en}</div>` : ''}
+    `;
+    el('copyTopicBtn').classList.remove('hidden');
+    el('copyTopicBtn').textContent = 'انسخ الاسم';
+    el('copyTopicBtn').classList.remove('copied');
+    el('copyFallbackInput').classList.remove('show');
+    el('copyFallbackInput').value = t.ar;
+    currentCopyText = t.ar;
+  }
+}
+
+let currentCopyText = '';
+el('copyTopicBtn').addEventListener('click', async ()=>{
+  const btn = el('copyTopicBtn');
+  const success = await copyText(currentCopyText);
+  playClick();
+  if(success){
+    btn.textContent = 'اتنسخ';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = 'انسخ الاسم'; btn.classList.remove('copied'); }, 1400);
+  }else{
+    btn.textContent = 'اختار نسخ من تحت';
+    btn.classList.remove('copied');
+    const input = el('copyFallbackInput');
+    input.classList.add('show');
+    input.focus();
+    input.select();
+    setTimeout(()=>{ btn.textContent = 'انسخ الاسم'; }, 3000);
+  }
+});
+
+// ---------- start / overlay ----------
+el('startBtn').addEventListener('click', ()=>{
+  if(!currentTopic) return;
+  playClick();
+  el('ovTopic').textContent = currentTopic.ar;
+  if(mode==='research'){
+    setupTimer('research', settings.researchMin*60);
+    el('ovCaption').textContent = 'هتتفرج على المصدر اللي حابه. دوس ابدأ لما تكون جاهز.';
+  }else{
+    setupTimer('speak', settings.speakSec);
+    el('ovCaption').textContent = 'اتكلم من غير ما تقرا. دوس ابدأ لما تكون جاهز.';
+  }
+  el('timerOverlay').classList.add('show');
+});
+
+function setupTimer(stage, seconds){
+  clearInterval(timerInterval);
+  timerStage = stage;
+  timerSecondsLeft = seconds;
+  timerTotal = seconds;
+  timerRunning = false;
+  hasStarted = false;
+  beepedAt = null;
+  el('ovStage').textContent = stage==='research' ? 'وقت البحث' : 'وقت الكلام';
+  el('ringFg').setAttribute('stroke', stage==='research' ? '#6e9c8e' : '#d2a24c');
+  el('ovEndBtn').disabled = false;
+  el('ovStartPauseBtn').disabled = false;
+  renderRing();
+  updateControlBtn();
+}
+
+function updateControlBtn(){
+  const btn = el('ovStartPauseBtn');
+  if(timerRunning){
+    btn.textContent = 'إيقاف مؤقت';
+  }else if(hasStarted){
+    btn.textContent = 'استكمال';
+  }else{
+    btn.textContent = 'ابدأ';
+  }
+}
+
+el('ovStartPauseBtn').addEventListener('click', ()=>{
+  playClick();
+  if(timerSecondsLeft<=0) return;
+  if(timerRunning){
+    pauseRun();
+  }else{
+    hasStarted = true;
+    startRun();
+  }
+});
+
+el('ovEndBtn').addEventListener('click', ()=>{
+  playClick();
+  finishStage();
+});
+
+function startRun(){
+  clearInterval(timerInterval);
+  timerRunning = true;
+  updateControlBtn();
+  timerInterval = setInterval(()=>{
+    timerSecondsLeft--;
+    if(timerSecondsLeft<=0){
+      timerSecondsLeft = 0;
+      renderRing();
+      finishStage();
+      return;
+    }
+    if(timerSecondsLeft <= 3 && timerSecondsLeft >= 1 && beepedAt !== timerSecondsLeft){
+      beepedAt = timerSecondsLeft;
+      playBeep();
+    }
+    renderRing();
+  }, 1000);
+}
+
+function pauseRun(){
+  clearInterval(timerInterval);
+  timerRunning = false;
+  updateControlBtn();
+}
+
+function finishStage(){
+  clearInterval(timerInterval);
+  timerRunning = false;
+  playAlarm();
+  if(timerStage === 'research'){
+    setupTimer('speak', settings.speakSec);
+    el('ovCaption').textContent = 'خلص وقت البحث. دوس ابدأ لما تكون جاهز تتكلم.';
+  }else{
+    timerSecondsLeft = 0;
+    renderRing();
+    el('ovCaption').textContent = 'خلصت. تقدر تقفل أو تدور موضوع تاني.';
+    el('ovEndBtn').disabled = true;
+    el('ovStartPauseBtn').disabled = true;
+    updateControlBtn();
+  }
+}
+
+el('ovBackBtn').addEventListener('click', ()=>{
+  playClick();
+  if(timerStage === 'speak' && mode === 'research' && timerSecondsLeft > 0){
+    setupTimer('research', settings.researchMin*60);
+    el('ovCaption').textContent = 'هتتفرج على المصدر اللي حابه. دوس ابدأ لما تكون جاهز.';
+  }else{
+    closeOverlay();
+  }
+});
+
+function closeOverlay(){
+  clearInterval(timerInterval);
+  timerRunning = false;
+  el('timerOverlay').classList.remove('show');
+  el('ovStage').textContent = 'البحث';
+}
+
+el('minus30').addEventListener('click', ()=> adjustTimer(-30));
+el('plus30').addEventListener('click', ()=> adjustTimer(30));
+el('minus10').addEventListener('click', ()=> adjustTimer(-10));
+el('plus10').addEventListener('click', ()=> adjustTimer(10));
+
+function adjustTimer(delta){
+  if(timerSecondsLeft<=0) return;
+  timerSecondsLeft = Math.max(5, timerSecondsLeft + delta);
+  timerTotal = Math.max(timerTotal, timerSecondsLeft);
+  renderRing();
+}
+
+function renderRing(){
+  const m = Math.floor(timerSecondsLeft/60);
+  const s = timerSecondsLeft%60;
+  el('ringTime').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  const circumference = 2*Math.PI*90;
+  const fraction = timerTotal>0 ? timerSecondsLeft/timerTotal : 0;
+  el('ringFg').setAttribute('stroke-dasharray', circumference);
+  el('ringFg').setAttribute('stroke-dashoffset', circumference*(1-fraction));
+}
+
+// ---------- settings ----------
+el('settingsBtn').addEventListener('click', async ()=>{
+  el('researchMinInput').value = settings.researchMin;
+  el('speakSecInput').value = settings.speakSec;
+  let customText = '';
+  try{
+    const c = await storageGet('ehky-custom-topics');
+    if(c && c.value){
+      const custom = JSON.parse(c.value);
+      customText = custom.map(t => `${t.ar} | ${t.en||''} | ${t.hook||''}`).join('\n');
+    }
+  }catch(e){}
+  el('customTopicsInput').value = customText;
+  el('settingsModal').classList.add('show');
+});
+
+el('settingsCancel').addEventListener('click', ()=> el('settingsModal').classList.remove('show'));
+
+el('settingsSave').addEventListener('click', async ()=>{
+  const researchMin = Math.max(1, parseInt(el('researchMinInput').value)||10);
+  const speakSec = Math.max(15, parseInt(el('speakSecInput').value)||60);
+  const lines = el('customTopicsInput').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  const customTopics = lines.map(line=>{
+    const parts = line.split('|').map(p=>p.trim());
+    return { ar: parts[0]||line, en: parts[1]||'', hook: parts[2]||'' };
+  });
+  await saveSettings(researchMin, speakSec, customTopics);
+  allTopics = [...BUILT_IN_TOPICS, ...customTopics];
+  usedIndices = [];
+  updateTopicCount();
+  if(mode==='research') el('startBtn').textContent = `ابدأ البحث ${settings.researchMin} دقايق`;
+  el('settingsModal').classList.remove('show');
+});
+
+loadState();
+</script>
+
+<!-- Free analytics (GoatCounter): sign up free at goatcounter.com, then replace YOURCODE below with your site code -->
+<script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
