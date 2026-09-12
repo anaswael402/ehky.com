@@ -137,7 +137,7 @@
   .category-select.open .category-btn .chevron{ transform: rotate(180deg); }
   .category-select.open .category-btn{ border-radius:16px 16px 0 0; }
   .category-list{
-    display:none;
+    display:block;
     position:absolute;
     top:100%; right:0; left:0;
     background: var(--bg-2);
@@ -146,10 +146,15 @@
     border-radius:0 0 16px 16px;
     overflow:hidden;
     z-index:10;
+    max-height:0;
+    opacity:0;
+    transition: max-height .25s ease, opacity .2s ease;
+  }
+  .category-select.open .category-list{
     max-height:260px;
+    opacity:1;
     overflow-y:auto;
   }
-  .category-select.open .category-list{ display:block; }
   .category-option{
     display:block;
     width:100%;
@@ -227,6 +232,16 @@
     width:100%;
     gap:6px;
     margin-bottom:26px;
+    opacity:1;
+    transform:scale(1);
+    transition: opacity .16s ease, transform .16s ease;
+  }
+  .topic-box.landed{
+    animation: topicPop .28s ease;
+  }
+  @keyframes topicPop{
+    0%{ opacity:0; transform:scale(0.94); }
+    100%{ opacity:1; transform:scale(1); }
   }
   .topic-ar{
     font-size:46px;
@@ -376,15 +391,23 @@
   .overlay{
     position:fixed; inset:0;
     background: var(--bg);
-    display:none;
+    display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:flex-start;
     padding: max(16px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
     overflow-y:auto;
     z-index:50;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition: opacity .25s ease;
   }
-  .overlay.show{ display:flex; }
+  .overlay.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
   .overlay-topic{
     color:var(--text-dim);
     font-size:14px;
@@ -406,7 +429,7 @@
   }
   .ring-wrap svg{ width:100%; height:100%; transform: rotate(-90deg); }
   .ring-bg{ fill:none; stroke: var(--line); stroke-width:10; }
-  .ring-fg{ fill:none; stroke-width:10; stroke-linecap:round; transition: stroke-dashoffset 1s linear; }
+  .ring-fg{ fill:none; stroke-width:10; stroke-linecap:round; transition: stroke-dashoffset 1s linear, stroke .3s ease; }
   .ring-time{
     position:absolute;
     font-size:56px;
@@ -1213,6 +1236,7 @@ async function copyText(text){
 function renderTopic(t, spinning){
   const box = el('topicBox');
   if(spinning){
+    box.classList.remove('landed');
     box.innerHTML = `<div class="topic-ar">${t.ar}</div>`;
     el('copyTopicBtn').classList.add('hidden');
     el('copyFallbackInput').classList.remove('show');
@@ -1227,6 +1251,9 @@ function renderTopic(t, spinning){
     el('copyFallbackInput').classList.remove('show');
     el('copyFallbackInput').value = t.ar;
     currentCopyText = t.ar;
+    box.classList.remove('landed');
+    void box.offsetWidth;
+    box.classList.add('landed');
   }
 }
 
