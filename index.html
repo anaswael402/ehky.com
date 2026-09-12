@@ -576,7 +576,7 @@
 
   <div class="category-select" id="categorySelect">
     <button class="category-btn" id="categoryBtn" aria-haspopup="listbox" aria-expanded="false">
-      <span id="categoryBtnLabel">عام</span>
+      <span id="categoryBtnLabel">عشوائي</span>
       <span class="chevron">▾</span>
     </button>
     <div class="category-list" id="categoryList" role="listbox"></div>
@@ -735,7 +735,30 @@ const BUILT_IN_TOPICS = [
   {cat:"bias", ar:"انحياز التأكيد", en:"Confirmation Bias", hook:"ليه بتدور بس على الأخبار اللي بتأكد اللي إنت مقتنع بيه أصلاً؟"},
   {cat:"social", ar:"تأثير الملاحظ", en:"Hawthorne Effect", hook:"ليه أداءك بيتحسن لمجرد إنك حاسس إن حد بيراقبك؟"},
   {cat:"consumer", ar:"نظرية التوقعات", en:"Prospect Theory", hook:"ليه وجع خسارة ١٠٠ جنيه أكبر من فرحة كسب ١٠٠ جنيه؟"},
-  {cat:"consumer", ar:"مفارقة الاختيار", en:"Paradox of Choice", hook:"ليه كتر الاختيارات بيخليك نادم على اللي اخترته أكتر مش أقل؟"}
+  {cat:"consumer", ar:"مفارقة الاختيار", en:"Paradox of Choice", hook:"ليه كتر الاختيارات بيخليك نادم على اللي اخترته أكتر مش أقل؟"},
+  {cat:"bias", ar:"وهم التكرار", en:"Baader-Meinhof Phenomenon", hook:"ليه أول ما تسمع كلمة جديدة تلاقيها بتتكرر قدامك في كل مكان فجأة؟"},
+  {cat:"social", ar:"نافذة أوفرتون", en:"The Overton Window", hook:"ليه كلام كان مرفوض تمامًا بقى مقبول بعد كام سنة من غير ما حد يلاحظ؟"},
+  {cat:"social", ar:"مبدأ بيتر", en:"The Peter Principle", hook:"ليه الموظف الشاطر بيتترقى لحد ما يوصل لوظيفة هو فاشل فيها؟"},
+  {cat:"social", ar:"قانون باركنسون", en:"Parkinson's Law", hook:"ليه المهمة بتاخد بالظبط الوقت اللي انت مديهولها، مهما كان قليل أو كتير؟"},
+  {cat:"bias", ar:"تأثير مانديلا", en:"The Mandela Effect", hook:"ليه ناس كتير فاكرة نفس الغلط بالظبط عن حاجة حصلت زمان؟"},
+  {cat:"bias", ar:"تأثير الهالة", en:"The Halo Effect", hook:"ليه حد شكله حلو بتفترض إنه ذكي أو كويس من غير أي دليل؟"},
+  {cat:"game", ar:"المعاملة بالمثل", en:"Reciprocity", hook:"ليه لما حد يقدملك حاجة مجانية بتحس إنك مديون له؟"},
+  {cat:"bias", ar:"تأثير بارنوم", en:"The Barnum Effect", hook:"ليه توصيف الأبراج بيحس كل واحد إنه مكتوب عنه بالظبط؟"},
+  {cat:"bias", ar:"الرجوع للمتوسط", en:"Regression to the Mean", hook:"ليه أحسن أداء ليك في حاجة غالبًا بييجي بعده أداء أعادي؟"},
+  {cat:"bias", ar:"تحيز التوفر", en:"Availability Heuristic", hook:"ليه بتقيّم خطر حاجة على قد إيه بتفتكرها بسهولة، مش على قد إيه فعلاً خطيرة؟"},
+  {cat:"consumer", ar:"تأثير التباين", en:"The Contrast Effect", hook:"ليه نفس السعر بيحس رخيص أو غالي على حسب اللي شفته قبله؟"},
+  {cat:"consumer", ar:"سلع فيبلين", en:"Veblen Goods", hook:"ليه في حاجات كل ما سعرها يزيد، الناس بتطلبها أكتر مش أقل؟"},
+  {cat:"bias", ar:"تأثير البلاسيبو", en:"The Placebo Effect", hook:"ليه ممكن تحس بتحسن فعلي من دوا مفيهوش أي مادة فعالة؟"},
+  {cat:"game", ar:"استراتيجية الضربة بالضربة", en:"Tit for Tat", hook:"ليه أبسط استراتيجية في التعاون هي إنك ترد بنفس اللي اتعامل بيه؟"},
+  {cat:"game", ar:"مشكلة الراكب المجاني", en:"The Free Rider Problem", hook:"ليه ناس بتستفيد من حاجة الكل بيدفع فيها من غير ما تساهم؟"},
+  {cat:"consumer", ar:"تأثيرات الشبكة", en:"Network Effects", hook:"ليه تطبيق بيبقى أكتر فايدة كل ما ناس أكتر تستخدمه؟"},
+  {cat:"bias", ar:"تأثير ليندي", en:"The Lindy Effect", hook:"ليه كل ما حاجة تفضل موجودة لمدة أطول، كل ما احتمال إنها تكمل أكتر؟"},
+  {cat:"social", ar:"تفكير القطيع", en:"Groupthink", hook:"ليه مجموعة أذكياء ممكن ياخدوا قرار غبي عشان محدش عايز يخالف الكل؟"},
+  {cat:"bias", ar:"تأثير التبرير الزايد", en:"The Overjustification Effect", hook:"ليه لما تاخد فلوس على حاجة كنت بتحبها مجانًا، بتحبها أقل؟"},
+  {cat:"bias", ar:"تصعيد الالتزام", en:"Escalation of Commitment", hook:"ليه بتكمل تضخ فلوس ووقت في مشروع فاشل عشان بس دخلت فيه بالفعل؟"},
+  {cat:"social", ar:"تأثير راشومون", en:"The Rashomon Effect", hook:"ليه أربع ناس شافوا نفس الحادثة بيحكوها بأربع طرق مختلفة تمامًا؟"},
+  {cat:"bias", ar:"فقدان الذاكرة الرقمي", en:"The Google Effect", hook:"ليه بقيت مش بتفتكر معلومة لو عارف إنك تقدر تجيبها بسهولة من النت؟"},
+  {cat:"social", ar:"تأثير بيجماليون", en:"The Pygmalion Effect", hook:"ليه توقعات الناس منك بترفع أو تقلل أداءك الفعلي؟"}
 ];
 
 const OFFCUFF_TOPICS = [
@@ -818,7 +841,30 @@ const OFFCUFF_TOPICS = [
   {cat:"oc_social", ar:"نصيحة اتجاهلتها", en:"Advice You Ignored", hook:"إيه نصيحة اتقالت لك وما اخدتش بيها وندمت بعدين؟"},
   {cat:"oc_social", ar:"حفلة عيد ميلاد", en:"A Birthday Party", hook:"إيه أحلى عيد ميلاد احتفلت بيه في حياتك؟"},
   {cat:"oc_social", ar:"السفر لوحدك", en:"Traveling Alone", hook:"إيه اللي بيخوفك أو بيعجبك في فكرة إنك تسافر لوحدك؟"},
-  {cat:"oc_social", ar:"حد غيّر طريقة تفكيرك", en:"Someone Who Changed How You Think", hook:"مين أكتر حد غيّر طريقة تفكيرك في حاجة معينة؟"}
+  {cat:"oc_social", ar:"حد غيّر طريقة تفكيرك", en:"Someone Who Changed How You Think", hook:"مين أكتر حد غيّر طريقة تفكيرك في حاجة معينة؟"},
+  {cat:"oc_work", ar:"كورس اونلاين مخلصتوش", en:"An Unfinished Online Course", hook:"إيه الكورس اللي اشتريته بحماس وسبته في الدرس الثالث؟"},
+  {cat:"oc_money", ar:"حاجة اشتريتها وندمت", en:"An Impulse Buy You Regretted", hook:"إيه أكتر حاجة اشتريتها وإنت متحمس، وندمت عليها بعد يومين؟"},
+  {cat:"oc_money", ar:"إشعار البنك", en:"A Bank Notification", hook:"إيه اللي بيحصل جواك لما يجيلك إشعار من البنك فجأة؟"},
+  {cat:"oc_tech", ar:"فيديو اتنشر من غير ما تتوقع", en:"A Video That Unexpectedly Went Viral", hook:"لو فيديو بتاعك انتشر فجأة، أول حاجة هتعملها إيه؟"},
+  {cat:"oc_social", ar:"تعليق سلبي على السوشيال ميديا", en:"A Negative Comment Online", hook:"إزاي بتتعامل مع تعليق سلبي من حد مش عارفه؟"},
+  {cat:"oc_work", ar:"يوم إجازة مرضية", en:"A Sick Day", hook:"إيه اللي بتحس بيه أول ما تقرر تاخد يوم إجازة مرضية؟"},
+  {cat:"oc_social", ar:"خناقة بسيطة مع صاحبك", en:"A Small Fight With a Friend", hook:"إيه أسخف خناقة حصلت بينك وبين صاحبك؟"},
+  {cat:"oc_social", ar:"نصيحة أهلك المتكررة", en:"Advice Your Family Keeps Repeating", hook:"إيه النصيحة اللي أهلك بيقولوهالك من ساعة ما انت صغير؟"},
+  {cat:"oc_food", ar:"تجربة أكل جديدة", en:"Trying New Food", hook:"إيه أغرب أكلة جربتها وكنت متردد تجربها؟"},
+  {cat:"oc_fitness", ar:"الصيام المتقطع", en:"Intermittent Fasting", hook:"إيه اللي حسيته أول مرة جربت الصيام المتقطع؟"},
+  {cat:"oc_work", ar:"ساعات إضافية", en:"Working Overtime", hook:"إيه آخر مرة قعدت في الشغل ساعات زيادة من غير ما تخطط؟"},
+  {cat:"oc_money", ar:"إرجاع منتج", en:"Returning a Product", hook:"إيه أصعب موقف واجهته وانت بترجع منتج اشتريته؟"},
+  {cat:"oc_tech", ar:"انقطاع النت", en:"An Internet Outage", hook:"بتعمل إيه بالظبط في أول ٥ دقايق لما النت يقطع فجأة؟"},
+  {cat:"oc_work", ar:"مذاكرة ليلة الامتحان", en:"Last-Minute Cramming", hook:"إيه أكتر حاجة ذاكرتها في ليلة الامتحان ونسيتها تاني يوم؟"},
+  {cat:"oc_social", ar:"شخص أثر فيك من بعيد", en:"Someone Who Influenced You From Afar", hook:"مين حد ما قابلتوش شخصيًا بس غيّر طريقة تفكيرك في حاجة؟"},
+  {cat:"oc_fitness", ar:"أول مرة تدخل الجيم", en:"Your First Time in a Gym", hook:"إزاي كان حسك أول مرة دخلت جيم؟"},
+  {cat:"oc_money", ar:"مقارنة نفسك بزمايلك في الفلوس", en:"Comparing Your Finances to Friends", hook:"ليه بتقارن وضعك المادي بزمايلك حتى لو مش قصدك؟"},
+  {cat:"oc_tech", ar:"تعليق على فيديو غيرك", en:"Commenting on Someone Else's Video", hook:"إيه اللي بيخليك تكتب تعليق على فيديو حد تانِ من غير ما تفكر؟"},
+  {cat:"oc_social", ar:"أول مرة تسافر بمفردك", en:"The First Time You Traveled Solo", hook:"إيه اللي كان مخوفك أكتر حاجة في أول سفرة لوحدك؟"},
+  {cat:"oc_work", ar:"فكرة رفضوها في الشغل", en:"An Idea That Got Rejected at Work", hook:"إيه فكرة اقترحتها في الشغل ورفضوها، وبعدين ندموا؟"},
+  {cat:"oc_food", ar:"وجبة بتربطها بذكرى", en:"A Meal Tied to a Memory", hook:"إيه أكلة لو شممت ريحتها بترجعلك ذكرى معينة على طول؟"},
+  {cat:"oc_fitness", ar:"يوم كسلت فيه عن كل حاجة", en:"A Day You Were Lazy About Everything", hook:"إيه آخر يوم حسيت إنك مش قادر تعمل ولا حاجة؟"},
+  {cat:"oc_social", ar:"حد فاجأك بمعروف", en:"Someone Who Surprised You With a Favor", hook:"إيه أكتر معروف فاجأك حد بيه من غير ما تطلبه؟"}
 ];
 
 const el = id => document.getElementById(id);
@@ -828,7 +874,7 @@ let usedIndices = [];
 let currentCategory = 'all';
 
 const CATEGORIES = [
-  {id:'all', label:'عام'},
+  {id:'all', label:'عشوائي'},
   {id:'bias', label:'تحيزات معرفية'},
   {id:'game', label:'نظرية الألعاب والتفاوض'},
   {id:'consumer', label:'قرارات المستهلك'},
@@ -836,7 +882,7 @@ const CATEGORIES = [
 ];
 
 const OFFCUFF_CATEGORIES = [
-  {id:'all', label:'عام'},
+  {id:'all', label:'عشوائي'},
   {id:'oc_work', label:'الشغل والمشوار'},
   {id:'oc_food', label:'الأكل'},
   {id:'oc_fitness', label:'الرياضة والجسم'},
@@ -1067,7 +1113,7 @@ el('modeOffCuff').addEventListener('click', ()=>{
   el('startBtn').textContent = 'ابدأ';
   currentCategory = 'all';
   usedIndices = [];
-  el('categoryBtnLabel').textContent = 'عام';
+  el('categoryBtnLabel').textContent = 'عشوائي';
   renderCategoryList();
   el('categorySelect').style.display = 'flex';
   currentTopic = null;
@@ -1109,8 +1155,14 @@ function spin(){
   const finalIndex = available[Math.floor(Math.random()*available.length)];
 
   let ticks = 0;
-  const maxTicks = 26;
+  const maxTicks = 38;
   const box = el('topicBox');
+
+  function tickDelay(i){
+    const t = i / maxTicks; // 0..1 through the spin
+    const eased = Math.pow(t, 4); // holds the fast pace even longer, brakes only right at the end
+    return 26 + eased * 260;
+  }
 
   function tick(){
     const randTopic = pool[Math.floor(Math.random()*pool.length)];
@@ -1118,7 +1170,7 @@ function spin(){
     playTick();
     ticks++;
     if(ticks < maxTicks){
-      setTimeout(tick, 28 + ticks*5);
+      setTimeout(tick, tickDelay(ticks));
     }else{
       currentTopic = pool[finalIndex];
       usedIndices.push(finalIndex);
