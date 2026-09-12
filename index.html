@@ -966,6 +966,12 @@ function playAlarm(){
 
 function playClick(){ tone(500, 0.04, {type:'sine', vol:0.2}); }
 
+function playTimerStart(){
+  tone(523, 0.13, {type:'triangle', vol:0.55});
+  setTimeout(()=> tone(659, 0.13, {type:'triangle', vol:0.6}), 100);
+  setTimeout(()=> tone(880, 0.24, {type:'triangle', vol:0.65}), 200);
+}
+
 function updateSoundBtn(){
   el('soundBtn').textContent = soundOn ? '🔊' : '🔇';
 }
@@ -1235,12 +1241,18 @@ function updateControlBtn(){
 }
 
 el('ovStartPauseBtn').addEventListener('click', ()=>{
-  playClick();
   if(timerSecondsLeft<=0) return;
   if(timerRunning){
+    playClick();
     pauseRun();
   }else{
+    const isFirstStart = !hasStarted;
     hasStarted = true;
+    if(isFirstStart){
+      playTimerStart();
+    }else{
+      playClick();
+    }
     startRun();
   }
 });
