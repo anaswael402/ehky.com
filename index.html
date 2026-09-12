@@ -387,20 +387,20 @@
   .overlay.show{ display:flex; }
   .overlay-topic{
     color:var(--text-dim);
-    font-size:13px;
+    font-size:14px;
     margin-bottom:4px;
-    margin-top:10px;
+    margin-top:6px;
   }
   .overlay-topic-name{
-    font-size:19px;
+    font-size:23px;
     font-weight:800;
     text-align:center;
     max-width:480px;
-    margin-bottom:12px;
+    margin-bottom:10px;
   }
   .ring-wrap{
     position:relative;
-    width:260px; height:260px;
+    width:280px; height:280px;
     display:flex; align-items:center; justify-content:center;
     flex-shrink:0;
   }
@@ -409,14 +409,14 @@
   .ring-fg{ fill:none; stroke-width:10; stroke-linecap:round; transition: stroke-dashoffset 1s linear; }
   .ring-time{
     position:absolute;
-    font-size:52px;
+    font-size:56px;
     font-weight:800;
     font-variant-numeric: tabular-nums;
   }
   .adjust-row{
     display:flex;
     gap:14px;
-    margin-top:10px;
+    margin-top:8px;
   }
   .adjust-row button{
     font-family:inherit;
@@ -430,17 +430,19 @@
     cursor:pointer;
   }
   .overlay-caption{
-    margin-top:10px;
+    margin-top:8px;
     color:var(--text-dim);
     font-size:14px;
     text-align:center;
   }
   .overlay-actions{
     display:flex;
-    gap:12px;
-    margin-top:12px;
-    margin-bottom:6px;
+    gap:10px;
+    margin-top:10px;
+    margin-bottom:4px;
     flex-shrink:0;
+    flex-wrap:wrap;
+    justify-content:center;
   }
   .link-btn{
     background:none; border:none;
@@ -513,8 +515,8 @@
   @media (max-height:700px){
     .overlay-topic{ margin-top:6px; }
     .overlay-topic-name{ font-size:18px; margin-bottom:10px; }
-    .ring-wrap{ width:220px; height:220px; }
-    .ring-time{ font-size:44px; }
+    .ring-wrap{ width:230px; height:230px; }
+    .ring-time{ font-size:46px; }
     .adjust-row{ margin-top:10px; }
     .overlay-caption{ margin-top:8px; font-size:13px; }
     .overlay-actions{ margin-top:12px; margin-bottom:6px; }
@@ -634,6 +636,7 @@
   <div class="overlay-caption" id="ovCaption">هتتفرج على المصدر اللي حابه. دوس ابدأ لما تكون جاهز.</div>
 
   <div class="overlay-actions">
+    <button class="btn btn-secondary" id="ovRestartBtn">إعادة</button>
     <button class="btn btn-secondary" id="ovEndBtn">إنهاء</button>
     <button class="btn btn-primary" id="ovStartPauseBtn">ابدأ</button>
   </div>
@@ -1241,6 +1244,22 @@ el('ovStartPauseBtn').addEventListener('click', ()=>{
 el('ovEndBtn').addEventListener('click', ()=>{
   playClick();
   finishStage();
+});
+
+function restartTimer(){
+  clearInterval(timerInterval);
+  timerRunning = false;
+  hasStarted = false;
+  timerSecondsLeft = timerTotal;
+  beepedAt = null;
+  el('ovEndBtn').disabled = false;
+  el('ovStartPauseBtn').disabled = false;
+  renderRing();
+  updateControlBtn();
+}
+el('ovRestartBtn').addEventListener('click', ()=>{
+  playClick();
+  restartTimer();
 });
 
 function startRun(){
