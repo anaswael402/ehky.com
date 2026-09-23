@@ -1479,6 +1479,7 @@ function finishStage(){
 // Analytics (visits, countries, referrers): GoatCounter.
 const SPIN_COUNTER_URL = 'https://api.counterapi.dev/v2/anas-waels-team-5645/ehky-spins';
 let shownSpins = 0;
+try{ shownSpins = parseInt(localStorage.getItem('ehky-spins-last')||'0',10) || 0; }catch(e){}
 
 // Pull the count out of the response, whatever field name the API uses.
 function extractCount(obj){
@@ -1502,6 +1503,7 @@ function renderSpinCount(total){
   total = parseInt(total,10) || 0;
   if(total < shownSpins) total = shownSpins; // never visibly go backwards
   shownSpins = total;
+  try{ localStorage.setItem('ehky-spins-last', String(total)); }catch(e){}
   if(total > 0){
     el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span> <span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
   }
@@ -1527,6 +1529,7 @@ async function trackSpin(){
 }
 
 async function loadSpinCount(){
+  if(shownSpins > 0) renderSpinCount(shownSpins); // show last known number instantly
   const v = await callCounter(SPIN_COUNTER_URL);
   if(v != null) renderSpinCount(v);
 }
