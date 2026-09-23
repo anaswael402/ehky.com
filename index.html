@@ -738,7 +738,6 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
 <script>
 const BUILT_IN_TOPICS = [
   {cat:"consumer", ar:"تأثير الحل الوسط", en:"Compromise Effect", hook:"ليه دايمًا بتختار الخيار اللي في النص من غير ما تقارن كويس؟"},
@@ -1476,15 +1475,28 @@ function finishStage(){
 }
 
 // ---------- spin tracking + public counter ----------
-// Raw spin count: CounterAPI V2 (public counter, no secret key in the page).
+// Raw spin count: CounterAPI V2 public counter, called directly (no key needed).
 // Analytics (visits, countries, referrers): GoatCounter.
-const COUNTER_WORKSPACE = 'anas-waels-team-5645';
-const COUNTER_NAME = 'ehky-spins';
-let spinClient = null;
+const SPIN_COUNTER_URL = 'https://api.counterapi.dev/v2/anas-waels-team-5645/ehky-spins';
 let shownSpins = 0;
-try{
-  if(window.Counter) spinClient = new Counter({ workspace: COUNTER_WORKSPACE, timeout: 8000 });
-}catch(e){}
+
+// Pull the count out of the response, whatever field name the API uses.
+function extractCount(obj){
+  if(obj == null) return null;
+  if(typeof obj === 'number') return obj;
+  if(typeof obj !== 'object') return null;
+  for(const k of ['up_count','value','count']){
+    if(typeof obj[k] === 'number') return obj[k];
+    if(typeof obj[k] === 'string' && /^\d+$/.test(obj[k])) return parseInt(obj[k],10);
+  }
+  for(const k of Object.keys(obj)){
+    if(obj[k] && typeof obj[k] === 'object'){
+      const v = extractCount(obj[k]);
+      if(v != null) return v;
+    }
+  }
+  return null;
+}
 
 function renderSpinCount(total){
   total = parseInt(total,10) || 0;
@@ -1495,27 +1507,28 @@ function renderSpinCount(total){
   }
 }
 
+async function callCounter(url){
+  try{
+    const res = await fetch(url, { cache: 'no-store' });
+    if(!res.ok) return null;
+    return extractCount(await res.json());
+  }catch(e){ return null; }
+}
+
 async function trackSpin(){
   try{
     if(window.goatcounter && window.goatcounter.count){
       goatcounter.count({ path: 'spin', title: 'Spin', event: true });
     }
   }catch(e){}
-  if(!spinClient) return;
-  // show the +1 immediately, then sync with the server's number
-  if(shownSpins > 0) renderSpinCount(shownSpins + 1);
-  try{
-    const result = await spinClient.up(COUNTER_NAME);
-    if(result && result.value != null) renderSpinCount(result.value);
-  }catch(e){}
+  if(shownSpins > 0) renderSpinCount(shownSpins + 1); // instant +1 on screen
+  const v = await callCounter(`${SPIN_COUNTER_URL}/up`);
+  if(v != null) renderSpinCount(v);
 }
 
 async function loadSpinCount(){
-  if(!spinClient) return;
-  try{
-    const result = await spinClient.get(COUNTER_NAME);
-    if(result && result.value != null) renderSpinCount(result.value);
-  }catch(e){}
+  const v = await callCounter(SPIN_COUNTER_URL);
+  if(v != null) renderSpinCount(v);
 }
 loadSpinCount();
 
