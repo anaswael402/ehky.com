@@ -72,6 +72,35 @@
     color: var(--text-dim);
     margin-top:-4px;
     min-height:16px;
+    text-align:center;
+    direction:rtl;
+    unicode-bidi:isolate;
+  }
+  .round-counter .live-dot{
+    margin-inline-end:6px;
+    vertical-align:middle;
+  }
+  .round-counter .counter-num{
+    unicode-bidi: isolate;
+    direction: ltr;
+    font-weight:700;
+    color: var(--text);
+    margin-inline-end:6px;
+  }
+  .live-dot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background: var(--danger);
+    box-shadow: 0 0 0 0 rgba(196,103,79,0.6);
+    animation: livePulse 1.6s ease-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes livePulse{
+    0%{ box-shadow: 0 0 0 0 rgba(196,103,79,0.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(196,103,79,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(196,103,79,0); }
   }
   .made-by{
     display:inline-flex;
@@ -1464,7 +1493,7 @@ async function loadSpinCount(){
     const data = await res.json();
     const total = parseInt(String(data.count||'0').replace(/[^\d]/g,''),10) || 0;
     if(total > 0){
-      el('roundCounter').textContent = `اتدوّر ${total.toLocaleString('ar-EG')} موضوع لحد دلوقتي`;
+      el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span><span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
     }
   }catch(e){}
 }
