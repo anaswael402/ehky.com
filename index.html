@@ -738,6 +738,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
 <script>
 const BUILT_IN_TOPICS = [
   {cat:"consumer", ar:"تأثير الحل الوسط", en:"Compromise Effect", hook:"ليه دايمًا بتختار الخيار اللي في النص من غير ما تقارن كويس؟"},
@@ -1475,19 +1476,23 @@ function finishStage(){
 }
 
 // ---------- spin tracking + public counter ----------
-// Raw spin count: CounterAPI (counts every spin, returns the new total instantly).
+// Raw spin count: CounterAPI V2 (public counter, no secret key in the page).
 // Analytics (visits, countries, referrers): GoatCounter.
-const SPIN_COUNTER_BASE = 'https://api.counterapi.dev/v1/ehky-net/spins';
+const COUNTER_WORKSPACE = 'anas-waels-team-5645';
+const COUNTER_NAME = 'ehky-spins';
+let spinClient = null;
+let shownSpins = 0;
+try{
+  if(window.Counter) spinClient = new Counter({ workspace: COUNTER_WORKSPACE, timeout: 8000 });
+}catch(e){}
 
 function renderSpinCount(total){
+  total = parseInt(total,10) || 0;
+  if(total < shownSpins) total = shownSpins; // never visibly go backwards
+  shownSpins = total;
   if(total > 0){
     el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span> <span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
   }
-}
-
-function readCount(data){
-  const v = data && (data.count ?? data.value ?? (data.data && (data.data.up_count ?? data.data.count)));
-  return parseInt(v,10) || 0;
 }
 
 async function trackSpin(){
@@ -1496,16 +1501,20 @@ async function trackSpin(){
       goatcounter.count({ path: 'spin', title: 'Spin', event: true });
     }
   }catch(e){}
+  if(!spinClient) return;
+  // show the +1 immediately, then sync with the server's number
+  if(shownSpins > 0) renderSpinCount(shownSpins + 1);
   try{
-    const res = await fetch(`${SPIN_COUNTER_BASE}/up`);
-    if(res.ok) renderSpinCount(readCount(await res.json()));
+    const result = await spinClient.up(COUNTER_NAME);
+    if(result && result.value != null) renderSpinCount(result.value);
   }catch(e){}
 }
 
 async function loadSpinCount(){
+  if(!spinClient) return;
   try{
-    const res = await fetch(`${SPIN_COUNTER_BASE}/`);
-    if(res.ok) renderSpinCount(readCount(await res.json()));
+    const result = await spinClient.get(COUNTER_NAME);
+    if(result && result.value != null) renderSpinCount(result.value);
   }catch(e){}
 }
 loadSpinCount();
