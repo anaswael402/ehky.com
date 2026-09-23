@@ -67,6 +67,12 @@
     font-weight:800;
     letter-spacing:0;
   }
+  .round-counter{
+    font-size:12.5px;
+    color: var(--text-dim);
+    margin-top:-4px;
+    min-height:16px;
+  }
   .made-by{
     display:inline-flex;
     align-items:center;
@@ -588,6 +594,7 @@
       </div>
     </div>
     <p>مواضيع اقتصاد سلوكي ونظرية ألعاب، تتمرن عليها من غير سكريبت</p>
+    <div class="round-counter" id="roundCounter" aria-live="polite"></div>
   </div>
 
   <div class="modes">
@@ -1434,8 +1441,29 @@ function finishStage(){
     el('ovEndBtn').disabled = true;
     el('ovStartPauseBtn').disabled = true;
     updateControlBtn();
+    try{
+      if(window.goatcounter && window.goatcounter.count){
+        goatcounter.count({ path: 'round-complete', title: 'Round complete', event: true });
+        setTimeout(loadRoundCount, 1500);
+      }
+    }catch(e){}
   }
 }
+
+// ---------- public round counter ----------
+async function loadRoundCount(){
+  try{
+    const res = await fetch('https://anaswael.goatcounter.com/counter/round-complete.json');
+    if(!res.ok) return;
+    const data = await res.json();
+    const n = (data.count||'0').replace(/[^\d]/g,'');
+    if(n){
+      const num = parseInt(n,10).toLocaleString('ar-EG');
+      el('roundCounter').textContent = `اتكلموا ${num} مرة لحد دلوقتي`;
+    }
+  }catch(e){}
+}
+loadRoundCount();
 
 el('ovBackBtn').addEventListener('click', ()=>{
   playClick();
@@ -1513,7 +1541,7 @@ el('settingsSave').addEventListener('click', async ()=>{
 loadState();
 </script>
 
-<!-- Free analytics (GoatCounter): sign up free at goatcounter.com, then replace YOURCODE below with your site code -->
-<script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<!-- Free analytics (GoatCounter) -->
+<script data-goatcounter="https://anaswael.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
