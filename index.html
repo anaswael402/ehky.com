@@ -1478,6 +1478,22 @@ function finishStage(){
 const GC_COUNTER_URL = 'https://anaswael.goatcounter.com/counter/spin.json';
 
 function trackSpin(){
+  // debug: count spins fired THIS BROWSER SESSION ONLY, shown directly on
+  // the page (no dev tools needed) so we can verify every spin attempts to
+  // send, independent of GoatCounter's dashboard/cache. Remove once confirmed.
+  try{
+    const n = (parseInt(sessionStorage.getItem('ehky-debug-spin-sent')||'0',10) || 0) + 1;
+    sessionStorage.setItem('ehky-debug-spin-sent', String(n));
+    let dbg = document.getElementById('ehkyDebugBadge');
+    if(!dbg){
+      dbg = document.createElement('div');
+      dbg.id = 'ehkyDebugBadge';
+      dbg.style.cssText = 'position:fixed;bottom:8px;left:8px;background:#000;color:#0f0;font:12px monospace;padding:4px 8px;border-radius:6px;z-index:9999;direction:ltr;opacity:.85;';
+      document.body.appendChild(dbg);
+    }
+    dbg.textContent = 'spins sent this session: ' + n;
+  }catch(e){}
+
   try{
     if(window.goatcounter && window.goatcounter.count){
       goatcounter.count({ path: 'spin', title: 'Spin', event: true, nosession: true });
