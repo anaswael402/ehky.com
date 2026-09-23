@@ -1475,42 +1475,37 @@ function finishStage(){
 }
 
 // ---------- spin tracking + public counter ----------
-const GC_COUNTER_URL = 'https://anaswael.goatcounter.com/counter/spin.json';
+// Raw spin count: CounterAPI (counts every spin, returns the new total instantly).
+// Analytics (visits, countries, referrers): GoatCounter.
+const SPIN_COUNTER_BASE = 'https://api.counterapi.dev/v1/ehky-net/spins';
 
-function trackSpin(){
-  // debug: count spins fired THIS BROWSER SESSION ONLY, shown directly on
-  // the page (no dev tools needed) so we can verify every spin attempts to
-  // send, independent of GoatCounter's dashboard/cache. Remove once confirmed.
-  try{
-    const n = (parseInt(sessionStorage.getItem('ehky-debug-spin-sent')||'0',10) || 0) + 1;
-    sessionStorage.setItem('ehky-debug-spin-sent', String(n));
-    let dbg = document.getElementById('ehkyDebugBadge');
-    if(!dbg){
-      dbg = document.createElement('div');
-      dbg.id = 'ehkyDebugBadge';
-      dbg.style.cssText = 'position:fixed;bottom:8px;left:8px;background:#000;color:#0f0;font:12px monospace;padding:4px 8px;border-radius:6px;z-index:9999;direction:ltr;opacity:.85;';
-      document.body.appendChild(dbg);
-    }
-    dbg.textContent = 'spins sent this session: ' + n;
-  }catch(e){}
+function renderSpinCount(total){
+  if(total > 0){
+    el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span> <span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
+  }
+}
 
+function readCount(data){
+  const v = data && (data.count ?? data.value ?? (data.data && (data.data.up_count ?? data.data.count)));
+  return parseInt(v,10) || 0;
+}
+
+async function trackSpin(){
   try{
     if(window.goatcounter && window.goatcounter.count){
-      goatcounter.count({ path: 'spin', title: 'Spin', event: true, nosession: true });
-      setTimeout(loadSpinCount, 2000);
+      goatcounter.count({ path: 'spin', title: 'Spin', event: true });
     }
+  }catch(e){}
+  try{
+    const res = await fetch(`${SPIN_COUNTER_BASE}/up`);
+    if(res.ok) renderSpinCount(readCount(await res.json()));
   }catch(e){}
 }
 
 async function loadSpinCount(){
   try{
-    const res = await fetch(GC_COUNTER_URL);
-    if(!res.ok) return;
-    const data = await res.json();
-    const total = parseInt(String(data.count||'0').replace(/[^\d]/g,''),10) || 0;
-    if(total > 0){
-      el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span> <span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
-    }
+    const res = await fetch(`${SPIN_COUNTER_BASE}/`);
+    if(res.ok) renderSpinCount(readCount(await res.json()));
   }catch(e){}
 }
 loadSpinCount();
