@@ -85,7 +85,7 @@
     direction: ltr;
     font-weight:700;
     color: var(--text);
-    margin-inline-end:6px;
+    margin-inline-end:8px;
   }
   .live-dot{
     display:inline-block;
@@ -1480,7 +1480,7 @@ const GC_COUNTER_URL = 'https://anaswael.goatcounter.com/counter/spin.json';
 function trackSpin(){
   try{
     if(window.goatcounter && window.goatcounter.count){
-      goatcounter.count({ path: 'spin', title: 'Spin', event: true });
+      goatcounter.count({ path: 'spin', title: 'Spin', event: true, nosession: true });
       setTimeout(loadSpinCount, 2000);
     }
   }catch(e){}
@@ -1493,7 +1493,7 @@ async function loadSpinCount(){
     const data = await res.json();
     const total = parseInt(String(data.count||'0').replace(/[^\d]/g,''),10) || 0;
     if(total > 0){
-      el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span><span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
+      el('roundCounter').innerHTML = `<span class="live-dot"></span><span class="counter-num">${total.toLocaleString('en-US')}</span> <span class="counter-label">مواضيع اتدوروا لحد دلوقتي</span>`;
     }
   }catch(e){}
 }
