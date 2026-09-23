@@ -1241,6 +1241,7 @@ function spin(){
     }else{
       currentTopic = pool[finalIndex];
       usedIndices.push(finalIndex);
+      trackSpin();
       renderTopic(currentTopic, false);
       playLand();
       el('statusLabel').textContent = 'جاهز';
@@ -1441,29 +1442,33 @@ function finishStage(){
     el('ovEndBtn').disabled = true;
     el('ovStartPauseBtn').disabled = true;
     updateControlBtn();
-    try{
-      if(window.goatcounter && window.goatcounter.count){
-        goatcounter.count({ path: 'round-complete', title: 'Round complete', event: true });
-        setTimeout(loadRoundCount, 1500);
-      }
-    }catch(e){}
   }
 }
 
-// ---------- public round counter ----------
-async function loadRoundCount(){
+// ---------- spin tracking + public counter ----------
+const GC_COUNTER_URL = 'https://anaswael.goatcounter.com/counter/spin.json';
+
+function trackSpin(){
   try{
-    const res = await fetch('https://anaswael.goatcounter.com/counter/round-complete.json');
-    if(!res.ok) return;
-    const data = await res.json();
-    const n = (data.count||'0').replace(/[^\d]/g,'');
-    if(n){
-      const num = parseInt(n,10).toLocaleString('ar-EG');
-      el('roundCounter').textContent = `اتكلموا ${num} مرة لحد دلوقتي`;
+    if(window.goatcounter && window.goatcounter.count){
+      goatcounter.count({ path: 'spin', title: 'Spin', event: true });
+      setTimeout(loadSpinCount, 2000);
     }
   }catch(e){}
 }
-loadRoundCount();
+
+async function loadSpinCount(){
+  try{
+    const res = await fetch(GC_COUNTER_URL);
+    if(!res.ok) return;
+    const data = await res.json();
+    const total = parseInt(String(data.count||'0').replace(/[^\d]/g,''),10) || 0;
+    if(total > 0){
+      el('roundCounter').textContent = `اتدوّر ${total.toLocaleString('ar-EG')} موضوع لحد دلوقتي`;
+    }
+  }catch(e){}
+}
+loadSpinCount();
 
 el('ovBackBtn').addEventListener('click', ()=>{
   playClick();
