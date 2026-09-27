@@ -7,13 +7,13 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>احكي بقى</title>
-<meta name="description" content="أداة مجانية لتمرين نفسك على شرح مفاهيم الاقتصاد السلوكي ونظرية الألعاب من غير سكريبت. من عند أنس وائل.">
+<meta name="description" content="أداة مجانية تتمرن فيها تتكلم من غير سكريبت: مواضيع يومية، مفاهيم اقتصاد سلوكي، وليه الحاجات حوالينا معمولة كده. من عند أنس وائل.">
 <meta property="og:title" content="احكي بقى">
-<meta property="og:description" content="أداة مجانية لتمرين نفسك على شرح مفاهيم الاقتصاد السلوكي ونظرية الألعاب من غير سكريبت.">
+<meta property="og:description" content="أداة مجانية تتمرن فيها تتكلم من غير سكريبت: مواضيع يومية، مفاهيم اقتصاد سلوكي، وليه الحاجات حوالينا معمولة كده. من عند أنس وائل.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="احكي بقى">
-<meta name="twitter:description" content="أداة مجانية لتمرين نفسك على شرح مفاهيم الاقتصاد السلوكي ونظرية الألعاب من غير سكريبت.">
+<meta name="twitter:description" content="أداة مجانية تتمرن فيها تتكلم من غير سكريبت: مواضيع يومية، مفاهيم اقتصاد سلوكي، وليه الحاجات حوالينا معمولة كده. من عند أنس وائل.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -27,6 +27,7 @@
     --accent-2: #6e9c8e;
     --line: rgba(239,231,216,0.12);
     --danger: #c4674f;
+    --why: #d98c6a;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html,body{height:100%;}
@@ -240,6 +241,28 @@
   .modes button:nth-child(2).active{
     background: var(--accent);
   }
+  .modes button:nth-child(3).active{
+    background: var(--why);
+    color:#1c0f0a;
+  }
+  .overlay-hook{
+    color: var(--text-dim);
+    font-size:14px;
+    line-height:1.8;
+    text-align:center;
+    max-width:440px;
+    margin-top:-4px;
+    margin-bottom:10px;
+  }
+  .overlay-hook:empty{ display:none; }
+  @media (max-width:380px){
+    .modes button{ padding:6px 12px; font-size:13px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .live-dot{ animation:none; }
+    .topic-box.landed{ animation:none; }
+    .ring-fg{ transition:none; }
+  }
   .hint{
     color:var(--text-dim);
     font-size:13px;
@@ -283,6 +306,10 @@
     font-weight:800;
     line-height:1.3;
     max-width:520px;
+  }
+  .topic-ar.long{
+    font-size:34px;
+    line-height:1.4;
   }
   .topic-en{
     color:var(--text-dim);
@@ -569,6 +596,7 @@
 
   @media (max-width:480px){
     .topic-ar{ font-size:34px; }
+    .topic-ar.long{ font-size:26px; }
     .social-row{ flex-direction:column; align-items:center; gap:8px; }
     .icon-group{ justify-content:center; }
     .made-by{ font-size:12px; padding:5px 12px 5px 6px; }
@@ -622,13 +650,14 @@
         </a>
       </div>
     </div>
-    <p>مواضيع اقتصاد سلوكي ونظرية ألعاب، تتمرن عليها من غير سكريبت</p>
+    <p>اتمرن تتكلم من غير سكريبت، في مواضيع يومية ومفاهيم اقتصاد سلوكي وحاجات بتشوفها كل يوم</p>
     <div class="round-counter" id="roundCounter" aria-live="polite"></div>
   </div>
 
   <div class="modes">
-    <button id="modeOffCuff" class="active">من غير تحضير</button>
-    <button id="modeResearch">بحث الأول</button>
+    <button id="modeOffCuff" class="active" data-mode="offcuff">ارتجالي</button>
+    <button id="modeResearch" data-mode="research">مفاهيم</button>
+    <button id="modeWhy" data-mode="why">ليه كده؟</button>
   </div>
 
   <div class="hint" id="hintText">دوس "دور" يطلعلك موضوع، وبعدين ابدأ توقيت الكلام على طول.</div>
@@ -680,6 +709,7 @@
   </div>
   <div class="overlay-topic" id="ovStage">البحث</div>
   <div class="overlay-topic-name" id="ovTopic">—</div>
+  <div class="overlay-hook" id="ovHook"></div>
 
   <div class="ring-wrap">
     <svg viewBox="0 0 200 200">
@@ -749,11 +779,10 @@ const BUILT_IN_TOPICS = [
   {cat:"social", ar:"الجهل الجماعي", en:"Pluralistic Ignorance", hook:"ليه كل الناس في القاعة ساكتة، وكل واحد فيهم فاكر إنه الوحيد اللي مش فاهم؟"},
   {cat:"bias", ar:"تأثير زيجارنيك", en:"Zeigarnik Effect", hook:"ليه فكرة ناقصة بتفضل عالقة في دماغك أكتر من فكرة خلصتها؟"},
   {cat:"consumer", ar:"تأثير ديدرو", en:"Diderot Effect", hook:"ليه لما تشتري حاجة جديدة بتحس إن كل اللي حواليها لازم يتغير كمان؟"},
-  {cat:"consumer", ar:"التقييم الآني للمستقبل", en:"Hyperbolic Discounting", hook:"ليه بتختار المتعة دلوقتي حتى لو عارف إنها هتكلفك أكتر بكرة؟"},
+  {cat:"consumer", ar:"الخصم الزائدي", en:"Hyperbolic Discounting", hook:"ليه بتختار المتعة دلوقتي حتى لو عارف إنها هتكلفك أكتر بكرة؟"},
   {cat:"consumer", ar:"تأثير الامتلاك", en:"Endowment Effect", hook:"ليه الحاجة بتاعتك بتحس إنها تستاهل أكتر لما تيجي تبيعها؟"},
-  {cat:"consumer", ar:"إرهاق الاختيارات", en:"Choice Overload", hook:"ليه كل ما الخيارات تزيد، بتحس إنك مش قادر تختار أصلاً؟"},
   {cat:"game", ar:"لعنة الفائز", en:"Winner's Curse", hook:"ليه اللي بيكسب المزاد غالبًا بيكون هو اللي دفع زيادة عن قيمة الحاجة؟"},
-  {cat:"social", ar:"الانحدار المعلوماتي", en:"Information Cascades", hook:"ليه بتتبع القرار اللي كل الناس عملاه حتى لو معلوماتك بتقولك حاجة تانية؟"},
+  {cat:"social", ar:"التتابع المعلوماتي", en:"Information Cascades", hook:"ليه بتتبع القرار اللي كل الناس عملاه حتى لو معلوماتك بتقولك حاجة تانية؟"},
   {cat:"bias", ar:"وهم التركيز", en:"Focusing Illusion", hook:"ليه فاكر إن حاجة واحدة هتغيّر حياتك كلها لو حصلت؟"},
   {cat:"social", ar:"قانون باركنسون للتفاهات", en:"Law of Triviality", hook:"ليه الاجتماعات بتاخد وقت أطول في مناقشة أصغر التفاصيل؟"},
   {cat:"consumer", ar:"تأثير إيكيا", en:"IKEA Effect", hook:"ليه الحاجة اللي إنت ركبتها بإيدك بتحبها أكتر من اللي جاهزة؟"},
@@ -773,13 +802,11 @@ const BUILT_IN_TOPICS = [
   {cat:"social", ar:"مفارقة أبيلين", en:"Abilene Paradox", hook:"ليه بتوافق على خطة محدش فيكم عايزها فعلاً؟"},
   {cat:"social", ar:"تأثير بن فرانكلين", en:"Ben Franklin Effect", hook:"ليه حد عمل معروف ليك بيحبك أكتر بعدها، مش العكس؟"},
   {cat:"bias", ar:"الانحياز للحالة الراهنة", en:"Status Quo Bias", hook:"ليه بتفضل تسيب الحاجة زي ما هي حتى لو التغيير أحسن؟"},
-  {cat:"consumer", ar:"تأثير الرقم المرجعي", en:"Anchoring", hook:"ليه أول سعر تشوفه بيفضل عالق في دماغك وإنت بتفاصل؟"},
-  {cat:"bias", ar:"القمار الغارق", en:"Sunk Cost Fallacy", hook:"ليه بتكمل في حاجة عارف إنها فاشلة، بس عشان دفعت فيها فلوس؟"},
-  {cat:"social", ar:"تأثير الرافعة الاجتماعية", en:"Social Proof", hook:"ليه بتقف في الطابور الأطول من غير ما تعرف هو طابور لإيه؟"},
+  {cat:"bias", ar:"مغالطة التكلفة الغارقة", en:"Sunk Cost Fallacy", hook:"ليه بتكمل في حاجة عارف إنها فاشلة، بس عشان دفعت فيها فلوس؟"},
+  {cat:"social", ar:"الدليل الاجتماعي", en:"Social Proof", hook:"ليه بتقف في الطابور الأطول من غير ما تعرف هو طابور لإيه؟"},
   {cat:"game", ar:"معضلة السجينين", en:"Prisoner's Dilemma", hook:"ليه اتنين عاقلين ممكن ياخدوا قرار يضر الاتنين؟"},
   {cat:"game", ar:"مأساة المشاع", en:"Tragedy of the Commons", hook:"ليه حاجة مفيدة للكل بتتبهدل لما محدش يحس إنها ملكه؟"},
-  {cat:"bias", ar:"تأثير الألفة الزايدة", en:"Familiarity Backfire Effect", hook:"ليه تكرار تفنيد شائعة ممكن يخليها تنتشر أكتر؟"},
-  {cat:"bias", ar:"العمى الاختياري", en:"Choice-Supportive Bias", hook:"ليه بعد ما تختار حاجة بتلاقي نفسك بتدافع عنها حتى لو غلط؟"},
+  {cat:"bias", ar:"انحياز دعم الاختيار", en:"Choice-Supportive Bias", hook:"ليه بعد ما تختار حاجة بتلاقي نفسك بتدافع عنها حتى لو غلط؟"},
   {cat:"bias", ar:"تأثير الإطار", en:"Framing Effect", hook:"ليه نفس الخبر بالظبط بيحسسك مختلف لو اتقال بطريقة تانية؟"},
   {cat:"social", ar:"نظرية الإشارة في سوق الشغل", en:"Signaling in Job Markets", hook:"ليه الشهادة مش دايمًا عن اللي اتعلمته، لكن عن اللي قدرت تكمله؟"},
   {cat:"game", ar:"الاختيار العكسي", en:"Adverse Selection", hook:"ليه شركات التأمين خايفة من اللي بيدوروا عليها أكتر من غيرهم؟"},
@@ -787,12 +814,12 @@ const BUILT_IN_TOPICS = [
   {cat:"consumer", ar:"تأثير القافلة", en:"Bandwagon Effect", hook:"ليه بتحب حاجة أكتر لما تعرف إن ناس كتير بتحبها؟"},
   {cat:"bias", ar:"وهم السيطرة", en:"Illusion of Control", hook:"ليه حاسس إنك بتتحكم في نرد اللعب وإنت بترميه بقوة؟"},
   {cat:"bias", ar:"تأثير دانينج-كروجر", en:"Dunning-Kruger Effect", hook:"ليه أقل واحد فاهم في حاجة، بيكون أكتر واحد واثق فيها؟"},
-  {cat:"consumer", ar:"القاعدة العشرية", en:"Decoy Effect", hook:"ليه ضيفوا حجم وسط في المنيو مش حد بيطلبه أصلاً؟"},
+  {cat:"consumer", ar:"تأثير الطُعم", en:"Decoy Effect", hook:"ليه ضيفوا حجم وسط في المنيو مش حد بيطلبه أصلاً؟"},
   {cat:"social", ar:"تأثير باربرا سترايسند", en:"Streisand Effect", hook:"ليه محاولتك تخبي حاجة بتخليها تنتشر أكتر؟"},
-  {cat:"social", ar:"القانون الحديدي للمكافأة", en:"Perverse Incentives", hook:"ليه مكافأة موظف على عدد المكالمات بتخلي المكالمات أسوأ؟"},
+  {cat:"social", ar:"الحوافز العكسية", en:"Perverse Incentives", hook:"ليه مكافأة موظف على عدد المكالمات بتخلي المكالمات أسوأ؟"},
   {cat:"bias", ar:"تأثير الاتساق", en:"Consistency Bias", hook:"ليه بتفضل تصر على رأيك القديم حتى لو الدليل اتغير؟"},
   {cat:"bias", ar:"انحياز التأكيد", en:"Confirmation Bias", hook:"ليه بتدور بس على الأخبار اللي بتأكد اللي إنت مقتنع بيه أصلاً؟"},
-  {cat:"social", ar:"تأثير الملاحظ", en:"Hawthorne Effect", hook:"ليه أداءك بيتحسن لمجرد إنك حاسس إن حد بيراقبك؟"},
+  {cat:"social", ar:"تأثير هوثورن", en:"Hawthorne Effect", hook:"ليه أداءك بيتحسن لمجرد إنك حاسس إن حد بيراقبك؟"},
   {cat:"consumer", ar:"نظرية التوقعات", en:"Prospect Theory", hook:"ليه وجع خسارة ١٠٠ جنيه أكبر من فرحة كسب ١٠٠ جنيه؟"},
   {cat:"consumer", ar:"مفارقة الاختيار", en:"Paradox of Choice", hook:"ليه كتر الاختيارات بيخليك نادم على اللي اخترته أكتر مش أقل؟"},
   {cat:"bias", ar:"وهم التكرار", en:"Baader-Meinhof Phenomenon", hook:"ليه أول ما تسمع كلمة جديدة تلاقيها بتتكرر قدامك في كل مكان فجأة؟"},
@@ -803,7 +830,7 @@ const BUILT_IN_TOPICS = [
   {cat:"bias", ar:"تأثير الهالة", en:"The Halo Effect", hook:"ليه حد شكله حلو بتفترض إنه ذكي أو كويس من غير أي دليل؟"},
   {cat:"game", ar:"المعاملة بالمثل", en:"Reciprocity", hook:"ليه لما حد يقدملك حاجة مجانية بتحس إنك مديون له؟"},
   {cat:"bias", ar:"تأثير بارنوم", en:"The Barnum Effect", hook:"ليه توصيف الأبراج بيحس كل واحد إنه مكتوب عنه بالظبط؟"},
-  {cat:"bias", ar:"الرجوع للمتوسط", en:"Regression to the Mean", hook:"ليه أحسن أداء ليك في حاجة غالبًا بييجي بعده أداء أعادي؟"},
+  {cat:"bias", ar:"الرجوع للمتوسط", en:"Regression to the Mean", hook:"ليه أحسن أداء ليك في حاجة غالبًا بييجي بعده أداء عادي؟"},
   {cat:"bias", ar:"تحيز التوفر", en:"Availability Heuristic", hook:"ليه بتقيّم خطر حاجة على قد إيه بتفتكرها بسهولة، مش على قد إيه فعلاً خطيرة؟"},
   {cat:"consumer", ar:"تأثير التباين", en:"The Contrast Effect", hook:"ليه نفس السعر بيحس رخيص أو غالي على حسب اللي شفته قبله؟"},
   {cat:"consumer", ar:"سلع فيبلين", en:"Veblen Goods", hook:"ليه في حاجات كل ما سعرها يزيد، الناس بتطلبها أكتر مش أقل؟"},
@@ -816,7 +843,7 @@ const BUILT_IN_TOPICS = [
   {cat:"bias", ar:"تأثير التبرير الزايد", en:"The Overjustification Effect", hook:"ليه لما تاخد فلوس على حاجة كنت بتحبها مجانًا، بتحبها أقل؟"},
   {cat:"bias", ar:"تصعيد الالتزام", en:"Escalation of Commitment", hook:"ليه بتكمل تضخ فلوس ووقت في مشروع فاشل عشان بس دخلت فيه بالفعل؟"},
   {cat:"social", ar:"تأثير راشومون", en:"The Rashomon Effect", hook:"ليه أربع ناس شافوا نفس الحادثة بيحكوها بأربع طرق مختلفة تمامًا؟"},
-  {cat:"bias", ar:"فقدان الذاكرة الرقمي", en:"The Google Effect", hook:"ليه بقيت مش بتفتكر معلومة لو عارف إنك تقدر تجيبها بسهولة من النت؟"},
+  {cat:"bias", ar:"تأثير جوجل", en:"The Google Effect", hook:"ليه بقيت مش بتفتكر معلومة لو عارف إنك تقدر تجيبها بسهولة من النت؟"},
   {cat:"social", ar:"تأثير بيجماليون", en:"The Pygmalion Effect", hook:"ليه توقعات الناس منك بترفع أو تقلل أداءك الفعلي؟"}
 ];
 
@@ -924,13 +951,13 @@ const OFFCUFF_TOPICS = [
   {cat:"oc_food", ar:"وجبة بتربطها بذكرى", en:"A Meal Tied to a Memory", hook:"إيه أكلة لو شممت ريحتها بترجعلك ذكرى معينة على طول؟"},
   {cat:"oc_fitness", ar:"يوم كسلت فيه عن كل حاجة", en:"A Day You Were Lazy About Everything", hook:"إيه آخر يوم حسيت إنك مش قادر تعمل ولا حاجة؟"},
   {cat:"oc_social", ar:"حد فاجأك بمعروف", en:"Someone Who Surprised You With a Favor", hook:"إيه أكتر معروف فاجأك حد بيه من غير ما تطلبه؟"},
-  {cat:"oc_history", ar:"لعنة الفراعنة", en:"The Curse of the Pharaohs", hook:"ليه الناس اللي فتحوا مقبرة توت عنخ آمون ماتوا واحد ورا التاني بعدها؟"},
+  {cat:"oc_history", ar:"لعنة الفراعنة", en:"The Curse of the Pharaohs", hook:"ليه ناس كتير صدقت إن اللي فتحوا مقبرة توت عنخ آمون اتلعنوا؟"},
   {cat:"oc_history", ar:"مكتبة الإسكندرية القديمة", en:"The Ancient Library of Alexandria", hook:"إيه اللي فعلاً حصل في أكبر مكتبة في العالم القديم وخلاها تتحرق؟"},
-  {cat:"oc_history", ar:"مقبرة توت عنخ آمون", en:"Tutankhamun's Tomb", hook:"إزاي مقبرة فرعون صغير السن فضلت مخبأة أكتر من ٣٠٠٠ سنة من غير حد يلمسها؟"},
+  {cat:"oc_history", ar:"مقبرة توت عنخ آمون", en:"Tutankhamun's Tomb", hook:"إزاي مقبرة توت عنخ آمون وصلتلنا بكنوزها تقريبًا كاملة، مع إن معظم مقابر الفراعنة اتسرقت؟"},
   {cat:"oc_history", ar:"سر بناء الأهرامات", en:"The Secret of How the Pyramids Were Built", hook:"إزاي المصريين القدماء نقلوا حجارة وزنها أطنان من غير أي معدات حديثة؟"},
   {cat:"oc_history", ar:"كليوباترا السابعة", en:"Cleopatra VII", hook:"ليه آخر ملكة لمصر القديمة لسه بيتكتب عنها لحد دلوقتي بعد أكتر من ٢٠٠٠ سنة؟"},
   {cat:"oc_history", ar:"حجر رشيد", en:"The Rosetta Stone", hook:"إزاي حجر واحد فك شفرة لغة كانت متنسية تمامًا لأكتر من ١٤٠٠ سنة؟"},
-  {cat:"oc_history", ar:"برج القاهرة", en:"Cairo Tower", hook:"ليه برج القاهرة اتبنى فعليًا كرد فعل سياسي على هدية أمريكية اتردت؟"},
+  {cat:"oc_history", ar:"برج القاهرة", en:"Cairo Tower", hook:"ليه بيقولوا إن برج القاهرة اتبنى بفلوس كانت جاية من أمريكا؟"},
   {cat:"oc_history", ar:"تمثال الحرية", en:"The Statue of Liberty", hook:"ليه تمثال الحرية أصلاً كان المفروض يتحط في مصر مش أمريكا؟"},
   {cat:"oc_history", ar:"وادي الملوك", en:"The Valley of the Kings", hook:"ليه الفراعنة سابوا الأهرامات وبدأوا يدفنوا موتاهم في وادي مخفي جوه الجبل؟"},
   {cat:"oc_history", ar:"حصان طروادة", en:"The Trojan Horse", hook:"ليه لحد دلوقتي مش عارفين لو حصان طروادة كان فعلاً موجود ولا مجرد أسطورة؟"},
@@ -947,7 +974,7 @@ const OFFCUFF_TOPICS = [
   {cat:"oc_history", ar:"مدينة بومبي المدفونة", en:"Pompeii", hook:"إزاي مدينة كاملة اتجمدت في لحظة واحدة تحت رماد بركان لآلاف السنين؟"},
   {cat:"oc_history", ar:"تمثال زيوس في أوليمبيا", en:"The Statue of Zeus at Olympia", hook:"ليه واحدة من أعظم عجائب الدنيا القديمة مالهاش أي أثر باقي دلوقتي؟"},
   {cat:"oc_history", ar:"معبد أرتميس", en:"The Temple of Artemis", hook:"إزاي معبد اتبنى وانهدم وابتنى تاني أكتر من مرة قبل ما يختفي تمامًا؟"},
-  {cat:"oc_history", ar:"ضريح موسولوس", en:"The Mausoleum at Halicarnassus", hook:"ليه كلمة مقبرة فخمة في كل لغات العالم أصلها من قبر ملك واحد بس؟"},
+  {cat:"oc_history", ar:"ضريح موسولوس", en:"The Mausoleum at Halicarnassus", hook:"ليه كلمة مقبرة فخمة في لغات كتير أصلها من قبر ملك واحد بس؟"},
   {cat:"oc_history", ar:"تمثال رودس العملاق", en:"The Colossus of Rhodes", hook:"إزاي تمثال برونزي ضخم زي تمثال الحرية وقف بس ٥٦ سنة قبل ما ينهار؟"},
   {cat:"oc_history", ar:"سور الصين العظيم", en:"The Great Wall of China", hook:"هل سور الصين العظيم فعلاً بيتشاف من الفضاء زي ما الناس بتقول؟"},
   {cat:"oc_history", ar:"مدينة البتراء الوردية", en:"Petra", hook:"إزاي مدينة كاملة اتنحتت جوه الصخر واختفت عن العالم لمئات السنين؟"},
@@ -962,20 +989,54 @@ const OFFCUFF_TOPICS = [
   {cat:"oc_history", ar:"برج بيزا المائل", en:"The Leaning Tower of Pisa", hook:"ليه برج بيزا مايل من ٨٠٠ سنة ولسه واقف مش بيقع؟"}
 ];
 
+const WHY_TOPICS = [
+  {cat:"why", ar:"ليه علبة البيتزا مربعة والبيتزا مدورة؟", en:"Why pizza boxes are square", hook:""},
+  {cat:"why", ar:"ليه الساعات في الإعلانات دايمًا على ١٠:١٠؟", en:"Why watch ads show 10:10", hook:""},
+  {cat:"why", ar:"ليه في جيب صغير جوه جيب الجينز؟", en:"Why jeans have a tiny pocket", hook:""},
+  {cat:"why", ar:"ليه في مسامير صغيرة على جيوب الجينز؟", en:"Why jeans have rivets", hook:""},
+  {cat:"why", ar:"ليه غطا القلم فيه خرم؟", en:"Why pen caps have a hole", hook:""},
+  {cat:"why", ar:"ليه حروف الكيبورد مش مترتبة أبجدي؟", en:"Why keyboards aren't alphabetical", hook:""},
+  {cat:"why", ar:"ليه في بروز صغير على حرف F وJ في الكيبورد؟", en:"Why F and J have bumps", hook:""},
+  {cat:"why", ar:"ليه أرقام التليفون ١-٢-٣ من فوق، والآلة الحاسبة ٧-٨-٩ من فوق؟", en:"Phone vs calculator keypads", hook:""},
+  {cat:"why", ar:"ليه في خرم في غطا الحلة؟", en:"Why pot lids have a hole", hook:""},
+  {cat:"why", ar:"ليه في كيس صغير مكتوب عليه \"لا تأكل\" جوه علبة الجزمة؟", en:"Why shoe boxes have silica gel", hook:""},
+  {cat:"why", ar:"ليه عمرك ما بتدخل الفلاشة صح من أول مرة؟", en:"Why old USB never fits first try", hook:""},
+  {cat:"why", ar:"ليه الطيارة بتطفي النور وتخليك تفتح الشباك وقت الهبوط؟", en:"Why planes dim lights for landing", hook:""},
+  {cat:"why", ar:"ليه شبابيك الطيارة مدورة؟", en:"Why airplane windows are round", hook:""},
+  {cat:"why", ar:"ليه في خرم صغير في شباك الطيارة؟", en:"Why plane windows have a tiny hole", hook:""},
+  {cat:"why", ar:"ليه غطا البلاعة مدور؟", en:"Why manhole covers are round", hook:""},
+  {cat:"why", ar:"ليه كيس الشيبسي نصه هوا؟", en:"Why chip bags are half air", hook:""},
+  {cat:"why", ar:"ليه علب الكانز مدورة مش مربعة؟", en:"Why drink cans are round", hook:""},
+  {cat:"why", ar:"ليه الترابيزة أم ٣ رجول مبتتهزش؟", en:"Why three-legged tables don't wobble", hook:""},
+  {cat:"why", ar:"ليه السلم الكهربا جنبه فرشة؟", en:"Why escalators have side brushes", hook:""},
+  {cat:"why", ar:"ليه في لمبة حمرا فوق الأبراج العالية؟", en:"Why tall towers have red lights", hook:""},
+  {cat:"why", ar:"ليه إشارة المرور أحمر وأصفر وأخضر بالذات؟", en:"Why traffic lights use these colors", hook:""},
+  {cat:"why", ar:"ليه التاكسي في إسكندرية أصفر وإسود، وفي القاهرة أبيض؟", en:"Alexandria vs Cairo taxi colors", hook:""},
+  {cat:"why", ar:"ليه العملة المعدنية حرفها مسنن؟", en:"Why coins have ridged edges", hook:""},
+  {cat:"why", ar:"ليه ماكينة الـATM بتطلعلك الكارت قبل الفلوس؟", en:"Why ATMs return the card first", hook:""},
+  {cat:"why", ar:"ليه غطا كوباية القهوة التيك أواي فيه خرم تاني صغير؟", en:"Why coffee lids have a second hole", hook:""},
+  {cat:"why", ar:"ليه القلم الرصاص الكلاسيكي لونه أصفر؟", en:"Why classic pencils are yellow", hook:""},
+  {cat:"why", ar:"ليه مكتوب YKK على معظم السوست؟", en:"Why most zippers say YKK", hook:""},
+  {cat:"why", ar:"ليه لوح الشيكولاتة متقسم مربعات؟", en:"Why chocolate bars have squares", hook:""},
+  {cat:"why", ar:"ليه ورق التواليت عليه نقوش بارزة؟", en:"Why toilet paper is embossed", hook:""},
+  {cat:"why", ar:"ليه البرغي بيتقفل يمين؟", en:"Why screws tighten clockwise", hook:""},
+  {cat:"why", ar:"ليه الشيكولاتة واللبان جنب الكاشير؟", en:"Why candy sits at the checkout", hook:""},
+  {cat:"why", ar:"ليه اللبن والعيش غالبًا في آخر السوبرماركت؟", en:"Why milk is at the back of the store", hook:""},
+  {cat:"why", ar:"ليه الأسعار بتخلص بـ ٩٩؟", en:"Why prices end in 99", hook:""},
+  {cat:"why", ar:"ليه المنيو فيه طبق غالي أوي محدش بيطلبه؟", en:"Why menus have one very pricey dish", hook:""},
+  {cat:"why", ar:"ليه جيوب بناطيل البنات صغيرة أو مش حقيقية أصلًا؟", en:"Why women's pockets are tiny or fake", hook:""},
+  {cat:"why", ar:"ليه منتجات البنات بتبقى أغلى من نفس المنتج بتاع الرجالة؟", en:"The pink tax", hook:""},
+  {cat:"why", ar:"ليه في شبكة جوه باب الميكروويف؟", en:"Why microwave doors have a mesh", hook:""},
+  {cat:"why", ar:"ليه القلم الجاف بيبطل يكتب لو الورقة على الحيطة؟", en:"Why ballpoints fail upside down", hook:""},
+  {cat:"why", ar:"ليه فيشة الكهربا عندنا سنتين بس؟", en:"Why our plugs have only two pins", hook:""}
+];
+
 const el = id => document.getElementById(id);
 
 let allTopics = [...BUILT_IN_TOPICS];
-let usedIndices = [];
 let currentCategory = 'all';
 
-const CATEGORIES = [
-  {id:'all', label:'عشوائي'},
-  {id:'bias', label:'تحيزات معرفية'},
-  {id:'game', label:'نظرية الألعاب والتفاوض'},
-  {id:'consumer', label:'قرارات المستهلك'},
-  {id:'social', label:'السلوك في الشغل والمجتمع'}
-];
-
+// Only the ارتجالي tab has sub-categories. مفاهيم and ليه كده؟ spin from their whole list.
 const OFFCUFF_CATEGORIES = [
   {id:'all', label:'عشوائي'},
   {id:'oc_work', label:'الشغل والمشوار'},
@@ -987,9 +1048,22 @@ const OFFCUFF_CATEGORIES = [
   {id:'oc_history', label:'تاريخ وآثار'}
 ];
 
-function categoriesForMode(){
-  return mode === 'offcuff' ? OFFCUFF_CATEGORIES : CATEGORIES;
-}
+const MODES = {
+  offcuff:  { btn:'modeOffCuff', research:false, categories:true,
+              hint:'دوس "دور" يطلعلك موضوع يومي، وبعدين اتكلم فيه على طول من غير تحضير.' },
+  research: { btn:'modeResearch', research:true, categories:false,
+              hint:'دوس "دور" يطلعلك مفهوم، خد وقتك تبحث فيه، وبعدين اشرحه من غير ما تقرا.' },
+  why:      { btn:'modeWhy', research:true, categories:false,
+              hint:'دوس "دور" يطلعلك سؤال عن حاجة بتشوفها كل يوم. ابحث عن الإجابة، وبعدين اشرحها بكلامك.' }
+};
+
+function categoriesForMode(){ return OFFCUFF_CATEGORIES; }
+
+// ---------- no-repeat memory (per tab + category, survives reloads) ----------
+function usedKey(){ return (mode==='why' ? 'why-v2' : mode) + ':' + (mode==='offcuff' ? currentCategory : 'all'); }
+function loadUsedMap(){ try{ return JSON.parse(localStorage.getItem('ehky-used')||'{}') || {}; }catch(e){ return {}; } }
+function getUsed(){ const m = loadUsedMap(); return Array.isArray(m[usedKey()]) ? m[usedKey()] : []; }
+function setUsed(arr){ try{ const m = loadUsedMap(); m[usedKey()] = arr; localStorage.setItem('ehky-used', JSON.stringify(m)); }catch(e){} }
 
 function renderCategoryList(){
   const list = el('categoryList');
@@ -1001,7 +1075,6 @@ function renderCategoryList(){
     btn.addEventListener('click', ()=>{
       currentCategory = btn.dataset.cat;
       el('categoryBtnLabel').textContent = cats.find(c=>c.id===currentCategory).label;
-      usedIndices = [];
       renderCategoryList();
       closeCategoryDropdown();
       playClick();
@@ -1026,20 +1099,25 @@ document.addEventListener('click', (e)=>{
 });
 
 function basePoolForMode(){
-  return mode === 'offcuff' ? OFFCUFF_TOPICS : allTopics;
+  if(mode === 'offcuff') return OFFCUFF_TOPICS;
+  if(mode === 'why') return WHY_TOPICS;
+  return allTopics;
 }
 
 function topicsInCategory(){
   const base = basePoolForMode();
-  if(currentCategory === 'all') return base;
-  return base.filter(t => t.cat === currentCategory || !t.cat);
+  if(mode !== 'offcuff' || currentCategory === 'all') return base;
+  return base.filter(t => t.cat === currentCategory);
 }
 let currentTopic = null;
-let mode = 'offcuff'; // 'offcuff' | 'research'
+let mode = 'offcuff'; // 'offcuff' | 'research' | 'why'
 renderCategoryList();
 let settings = { researchMin: 10, speakSec: 60 };
 
 let timerInterval = null;
+let timerRunning = false;
+let endAt = 0;          // wall-clock time the running stage ends (accurate even if the phone throttles the tab)
+let wakeLock = null;    // keeps the screen on while the timer runs
 let timerSecondsLeft = 0;
 let timerTotal = 0;
 let timerStage = null; // 'research' | 'speak'
@@ -1201,38 +1279,37 @@ function updateTopicCount(){
 }
 
 // ---------- mode toggle ----------
-el('modeOffCuff').addEventListener('click', ()=>{
-  mode='offcuff';
-  el('modeOffCuff').classList.add('active');
-  el('modeResearch').classList.remove('active');
-  el('hintText').textContent = 'دوس "دور" يطلعلك موضوع بسيط، وبعدين ابدأ توقيت الكلام على طول.';
-  el('startBtn').textContent = 'ابدأ';
+function startLabel(){
+  return MODES[mode].research ? `ابدأ البحث ${settings.researchMin} دقايق` : 'ابدأ';
+}
+
+function setMode(next){
+  if(!MODES[next]) return;
+  mode = next;
+  Object.entries(MODES).forEach(([k,m])=>{
+    const b = el(m.btn);
+    b.classList.toggle('active', k===mode);
+    b.setAttribute('aria-pressed', k===mode ? 'true' : 'false');
+  });
+  el('hintText').textContent = MODES[mode].hint;
   currentCategory = 'all';
-  usedIndices = [];
   el('categoryBtnLabel').textContent = 'عشوائي';
-  renderCategoryList();
-  el('categorySelect').style.display = 'flex';
-  currentTopic = null;
-  el('startBtn').disabled = true;
-  el('topicBox').innerHTML = '<div class="placeholder">دوس دور يطلعلك موضوع</div>';
-  el('copyTopicBtn').classList.add('hidden');
-  el('copyFallbackInput').classList.remove('show');
-});
-el('modeResearch').addEventListener('click', ()=>{
-  mode='research';
-  el('modeResearch').classList.add('active');
-  el('modeOffCuff').classList.remove('active');
-  el('hintText').textContent = 'دوس "دور"، هتاخد وقت تبحث في الموضوع، وبعدين تتكلم من غير ما تقرا.';
-  el('startBtn').textContent = `ابدأ البحث ${settings.researchMin} دقايق`;
-  currentCategory = 'all';
-  usedIndices = [];
   closeCategoryDropdown();
-  el('categorySelect').style.display = 'none';
+  if(MODES[mode].categories){
+    renderCategoryList();
+    el('categorySelect').style.display = '';
+  }else{
+    el('categorySelect').style.display = 'none';
+  }
   currentTopic = null;
   el('startBtn').disabled = true;
+  el('startBtn').textContent = startLabel();
   el('topicBox').innerHTML = '<div class="placeholder">دوس دور يطلعلك موضوع</div>';
   el('copyTopicBtn').classList.add('hidden');
   el('copyFallbackInput').classList.remove('show');
+}
+Object.entries(MODES).forEach(([k,m])=>{
+  el(m.btn).addEventListener('click', ()=>{ if(mode!==k){ playClick(); setMode(k); } });
 });
 
 // ---------- spin ----------
@@ -1245,9 +1322,10 @@ function spin(){
   el('startBtn').disabled = true;
   el('statusLabel').textContent = 'بيدور...';
 
-  if(usedIndices.length >= pool.length) usedIndices = [];
+  let used = getUsed().filter(i => i < pool.length);
+  if(used.length >= pool.length) used = [];
 
-  let available = pool.map((_,i)=>i).filter(i=>!usedIndices.includes(i));
+  let available = pool.map((_,i)=>i).filter(i=>!used.includes(i));
   const finalIndex = available[Math.floor(Math.random()*available.length)];
 
   let ticks = 0;
@@ -1269,14 +1347,15 @@ function spin(){
       setTimeout(tick, tickDelay(ticks));
     }else{
       currentTopic = pool[finalIndex];
-      usedIndices.push(finalIndex);
+      used.push(finalIndex);
+      setUsed(used);
       trackSpin();
       renderTopic(currentTopic, false);
       playLand();
       el('statusLabel').textContent = 'جاهز';
       el('spinBtn').disabled = false;
       el('startBtn').disabled = false;
-      el('startBtn').textContent = mode==='offcuff' ? 'ابدأ' : `ابدأ البحث ${settings.researchMin} دقايق`;
+      el('startBtn').textContent = startLabel();
     }
   }
   tick();
@@ -1311,13 +1390,14 @@ function renderTopic(t, spinning){
   const box = el('topicBox');
   if(spinning){
     box.classList.remove('landed');
-    box.innerHTML = `<div class="topic-ar">${t.ar}</div>`;
+    box.innerHTML = `<div class="topic-ar${t.ar.length>24?' long':''}">${t.ar}</div>`;
     el('copyTopicBtn').classList.add('hidden');
     el('copyFallbackInput').classList.remove('show');
   }else{
     box.innerHTML = `
-      <div class="topic-ar">${t.ar}</div>
-      ${t.en ? `<div class="topic-en">${t.en}</div>` : ''}
+      <div class="topic-ar${t.ar.length>24?' long':''}">${t.ar}</div>
+      ${mode!=='why' && t.en ? `<div class="topic-en">${t.en}</div>` : ''}
+      ${mode!=='why' && t.hook ? `<div class="topic-hook">${t.hook}</div>` : ''}
     `;
     el('copyTopicBtn').classList.remove('hidden');
     el('copyTopicBtn').textContent = 'انسخ الاسم';
@@ -1356,7 +1436,8 @@ el('startBtn').addEventListener('click', ()=>{
   if(!currentTopic) return;
   playClick();
   el('ovTopic').textContent = currentTopic.ar;
-  if(mode==='research'){
+  el('ovHook').textContent = mode!=='why' ? (currentTopic.hook || '') : '';
+  if(MODES[mode].research){
     setupTimer('research', settings.researchMin*60);
     el('ovCaption').textContent = 'هتتفرج على المصدر اللي حابه. دوس ابدأ لما تكون جاهز.';
   }else{
@@ -1368,6 +1449,7 @@ el('startBtn').addEventListener('click', ()=>{
 
 function setupTimer(stage, seconds){
   clearInterval(timerInterval);
+  releaseWakeLock();
   timerStage = stage;
   timerSecondsLeft = seconds;
   timerTotal = seconds;
@@ -1418,6 +1500,7 @@ el('ovEndBtn').addEventListener('click', ()=>{
 function restartTimer(){
   clearInterval(timerInterval);
   timerRunning = false;
+  releaseWakeLock();
   hasStarted = false;
   timerSecondsLeft = timerTotal;
   beepedAt = null;
@@ -1431,35 +1514,65 @@ el('ovRestartBtn').addEventListener('click', ()=>{
   restartTimer();
 });
 
-function startRun(){
-  clearInterval(timerInterval);
-  timerRunning = true;
-  updateControlBtn();
-  timerInterval = setInterval(()=>{
-    timerSecondsLeft--;
-    if(timerSecondsLeft<=0){
-      timerSecondsLeft = 0;
-      renderRing();
-      finishStage();
-      return;
+// ---------- screen wake lock ----------
+async function requestWakeLock(){
+  try{
+    if('wakeLock' in navigator && !wakeLock){
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', ()=>{ wakeLock = null; });
     }
-    if(timerSecondsLeft <= 3 && timerSecondsLeft >= 1 && beepedAt !== timerSecondsLeft){
-      beepedAt = timerSecondsLeft;
+  }catch(e){ wakeLock = null; }
+}
+function releaseWakeLock(){
+  try{ if(wakeLock) wakeLock.release(); }catch(e){}
+  wakeLock = null;
+}
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible' && timerRunning){
+    requestWakeLock();
+    timerTick();
+  }
+});
+
+function timerTick(){
+  const left = Math.max(0, Math.ceil((endAt - Date.now())/1000));
+  if(left !== timerSecondsLeft){
+    timerSecondsLeft = left;
+    if(left <= 3 && left >= 1 && beepedAt !== left){
+      beepedAt = left;
       playBeep();
     }
     renderRing();
-  }, 1000);
+  }
+  if(left <= 0){
+    timerSecondsLeft = 0;
+    renderRing();
+    finishStage();
+  }
+}
+
+function startRun(){
+  clearInterval(timerInterval);
+  timerRunning = true;
+  endAt = Date.now() + timerSecondsLeft*1000;
+  updateControlBtn();
+  requestWakeLock();
+  timerInterval = setInterval(timerTick, 250);
 }
 
 function pauseRun(){
   clearInterval(timerInterval);
   timerRunning = false;
+  timerSecondsLeft = Math.max(0, Math.ceil((endAt - Date.now())/1000));
+  releaseWakeLock();
+  renderRing();
   updateControlBtn();
 }
 
 function finishStage(){
   clearInterval(timerInterval);
   timerRunning = false;
+  releaseWakeLock();
   playAlarm();
   if(timerStage === 'research'){
     setupTimer('speak', settings.speakSec);
@@ -1537,7 +1650,7 @@ loadSpinCount();
 
 el('ovBackBtn').addEventListener('click', ()=>{
   playClick();
-  if(timerStage === 'speak' && mode === 'research' && timerSecondsLeft > 0){
+  if(timerStage === 'speak' && MODES[mode].research && timerSecondsLeft > 0){
     setupTimer('research', settings.researchMin*60);
     el('ovCaption').textContent = 'هتتفرج على المصدر اللي حابه. دوس ابدأ لما تكون جاهز.';
   }else{
@@ -1548,6 +1661,7 @@ el('ovBackBtn').addEventListener('click', ()=>{
 function closeOverlay(){
   clearInterval(timerInterval);
   timerRunning = false;
+  releaseWakeLock();
   el('timerOverlay').classList.remove('show');
   el('ovStage').textContent = 'البحث';
 }
@@ -1561,6 +1675,7 @@ function adjustTimer(delta){
   if(timerSecondsLeft<=0) return;
   timerSecondsLeft = Math.max(5, timerSecondsLeft + delta);
   timerTotal = Math.max(timerTotal, timerSecondsLeft);
+  if(timerRunning) endAt = Date.now() + timerSecondsLeft*1000;
   renderRing();
 }
 
@@ -1602,9 +1717,8 @@ el('settingsSave').addEventListener('click', async ()=>{
   });
   await saveSettings(researchMin, speakSec, customTopics);
   allTopics = [...BUILT_IN_TOPICS, ...customTopics];
-  usedIndices = [];
   updateTopicCount();
-  if(mode==='research') el('startBtn').textContent = `ابدأ البحث ${settings.researchMin} دقايق`;
+  el('startBtn').textContent = startLabel();
   el('settingsModal').classList.remove('show');
 });
 
