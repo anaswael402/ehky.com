@@ -1015,7 +1015,6 @@ const WHY_TOPICS = [
   {cat:"why", ar:"ليه غطا البلاعة مدور؟", en:"Why manhole covers are round", hook:""},
   {cat:"why", ar:"ليه كيس الشيبسي نصه هوا؟", en:"Why chip bags are half air", hook:""},
   {cat:"why", ar:"ليه علب الكانز مدورة مش مربعة؟", en:"Why drink cans are round", hook:""},
-  {cat:"why", ar:"ليه الترابيزة أم ٣ رجول مبتتهزش؟", en:"Why three-legged tables don't wobble", hook:""},
   {cat:"why", ar:"ليه السلم الكهربا جنبه فرشة؟", en:"Why escalators have side brushes", hook:""},
   {cat:"why", ar:"ليه في لمبة حمرا فوق الأبراج العالية؟", en:"Why tall towers have red lights", hook:""},
   {cat:"why", ar:"ليه إشارة المرور أحمر وأصفر وأخضر بالذات؟", en:"Why traffic lights use these colors", hook:""},
@@ -1024,19 +1023,22 @@ const WHY_TOPICS = [
   {cat:"why", ar:"ليه ماكينة الـATM بتطلعلك الكارت قبل الفلوس؟", en:"Why ATMs return the card first", hook:""},
   {cat:"why", ar:"ليه غطا كوباية القهوة التيك أواي فيه خرم تاني صغير؟", en:"Why coffee lids have a second hole", hook:""},
   {cat:"why", ar:"ليه القلم الرصاص الكلاسيكي لونه أصفر؟", en:"Why classic pencils are yellow", hook:""},
-  {cat:"why", ar:"ليه مكتوب YKK على معظم السوست؟", en:"Why most zippers say YKK", hook:""},
   {cat:"why", ar:"ليه لوح الشيكولاتة متقسم مربعات؟", en:"Why chocolate bars have squares", hook:""},
   {cat:"why", ar:"ليه ورق التواليت عليه نقوش بارزة؟", en:"Why toilet paper is embossed", hook:""},
-  {cat:"why", ar:"ليه البرغي بيتقفل يمين؟", en:"Why screws tighten clockwise", hook:""},
-  {cat:"why", ar:"ليه الشيكولاتة واللبان جنب الكاشير؟", en:"Why candy sits at the checkout", hook:""},
-  {cat:"why", ar:"ليه اللبن والعيش غالبًا في آخر السوبرماركت؟", en:"Why milk is at the back of the store", hook:""},
-  {cat:"why", ar:"ليه الأسعار بتخلص بـ ٩٩؟", en:"Why prices end in 99", hook:""},
   {cat:"why", ar:"ليه المنيو فيه طبق غالي أوي محدش بيطلبه؟", en:"Why menus have one very pricey dish", hook:""},
-  {cat:"why", ar:"ليه جيوب بناطيل البنات صغيرة أو مش حقيقية أصلًا؟", en:"Why women's pockets are tiny or fake", hook:""},
-  {cat:"why", ar:"ليه منتجات البنات بتبقى أغلى من نفس المنتج بتاع الرجالة؟", en:"The pink tax", hook:""},
-  {cat:"why", ar:"ليه في شبكة جوه باب الميكروويف؟", en:"Why microwave doors have a mesh", hook:""},
   {cat:"why", ar:"ليه القلم الجاف بيبطل يكتب لو الورقة على الحيطة؟", en:"Why ballpoints fail upside down", hook:""},
-  {cat:"why", ar:"ليه فيشة الكهربا عندنا سنتين بس؟", en:"Why our plugs have only two pins", hook:""}
+  {cat:"why", ar:"ليه فيشة الكهربا عندنا سنتين بس؟", en:"Why our plugs have only two pins", hook:""},
+  {cat:"why", ar:"ليه المصريين بيقولوا \"ده بالميت ١٠٠ جنيه\"؟", en:"Why Egyptians say \"worth a hundred pounds a hundred\"", hook:""},
+  {cat:"why", ar:"كلمة \"طز\" جت منين؟", en:"Where the word \"tuz\" came from", hook:""},
+  {cat:"why", ar:"أسامي أيام الأسبوع بالإنجليزي جت منين؟", en:"Where English weekday names came from", hook:""},
+  {cat:"why", ar:"ليه كل العيون الزرقاء fake؟", en:"Why blue eyes are an illusion", hook:""},
+  {cat:"why", ar:"الفرانكو جت منين؟", en:"Where Franco-Arabic came from", hook:""},
+  {cat:"why", ar:"ليه الطيارات لونها أبيض؟", en:"Why planes are white", hook:""},
+  {cat:"why", ar:"ليه مش ممكن نطبع فلوس أكتر؟", en:"Why we cannot just print more money", hook:""},
+  {cat:"why", ar:"ليه بتحس إنك عشت اللحظة دي مرتين؟", en:"Why déjà vu happens", hook:""},
+  {cat:"why", ar:"ليه رمز الطب ثعبان ملفوف حوالين عصا أو كأس؟", en:"Why the medical symbol is a snake on a staff or cup", hook:""},
+  {cat:"why", ar:"ليه برج بيزا مايل؟", en:"Why the Tower of Pisa leans", hook:""},
+  {cat:"why", ar:"ليه في مرايا في الأسانسير؟", en:"Why elevators have mirrors", hook:""}
 ];
 
 const el = id => document.getElementById(id);
@@ -1068,7 +1070,7 @@ const MODES = {
 function categoriesForMode(){ return OFFCUFF_CATEGORIES; }
 
 // ---------- no-repeat memory (per tab + category, survives reloads) ----------
-function usedKey(){ return (mode==='why' ? 'why-v2' : mode) + ':' + (mode==='offcuff' ? currentCategory : 'all'); }
+function usedKey(){ return (mode==='why' ? 'why-v3' : mode) + ':' + (mode==='offcuff' ? currentCategory : 'all'); }
 function loadUsedMap(){ try{ return JSON.parse(localStorage.getItem('ehky-used')||'{}') || {}; }catch(e){ return {}; } }
 function getUsed(){ const m = loadUsedMap(); return Array.isArray(m[usedKey()]) ? m[usedKey()] : []; }
 function setUsed(arr){ try{ const m = loadUsedMap(); m[usedKey()] = arr; localStorage.setItem('ehky-used', JSON.stringify(m)); }catch(e){} }
