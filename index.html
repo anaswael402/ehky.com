@@ -1028,9 +1028,9 @@ const WHY_TOPICS = [
   {cat:"why", ar:"ليه المنيو فيه طبق غالي أوي محدش بيطلبه؟", en:"Why menus have one very pricey dish", hook:""},
   {cat:"why", ar:"ليه القلم الجاف بيبطل يكتب لو الورقة على الحيطة؟", en:"Why ballpoints fail upside down", hook:""},
   {cat:"why", ar:"ليه فيشة الكهربا عندنا سنتين بس؟", en:"Why our plugs have only two pins", hook:""},
-  {cat:"why", ar:"ليه المصريين بيقولوا \"ده بالميت ١٠٠ جنيه\"؟", en:"Why Egyptians say \"worth a hundred pounds a hundred\"", hook:""},
+  {cat:"why", ar:"هي \"ده بالميت ١٠٠ جنيه\" جت منين؟", en:"Where \"ده بالميت ١٠٠ جنيه\" came from", hook:""},
   {cat:"why", ar:"كلمة \"طز\" جت منين؟", en:"Where the word \"tuz\" came from", hook:""},
-  {cat:"why", ar:"أسامي أيام الأسبوع بالإنجليزي جت منين؟", en:"Where English weekday names came from", hook:""},
+  {cat:"why", ar:"مين اللي سمّى أيام الأسبوع؟", en:"Who named the days of the week", hook:""},
   {cat:"why", ar:"ليه كل العيون الزرقاء fake؟", en:"Why blue eyes are an illusion", hook:""},
   {cat:"why", ar:"الفرانكو جت منين؟", en:"Where Franco-Arabic came from", hook:""},
   {cat:"why", ar:"ليه الطيارات لونها أبيض؟", en:"Why planes are white", hook:""},
@@ -1038,7 +1038,18 @@ const WHY_TOPICS = [
   {cat:"why", ar:"ليه بتحس إنك عشت اللحظة دي مرتين؟", en:"Why déjà vu happens", hook:""},
   {cat:"why", ar:"ليه رمز الطب ثعبان ملفوف حوالين عصا أو كأس؟", en:"Why the medical symbol is a snake on a staff or cup", hook:""},
   {cat:"why", ar:"ليه برج بيزا مايل؟", en:"Why the Tower of Pisa leans", hook:""},
-  {cat:"why", ar:"ليه في مرايا في الأسانسير؟", en:"Why elevators have mirrors", hook:""}
+  {cat:"why", ar:"ليه في مرايا في الأسانسير؟", en:"Why elevators have mirrors", hook:""},
+  {cat:"why", ar:"ليه إثيوبيا لسه في ٢٠١٩ واحنا في ٢٠٢٦؟", en:"Why Ethiopia is in 2019", hook:""},
+  {cat:"why", ar:"ليه العربي بيتكتب من اليمين لليسار والإنجليزي من اليسار لليمين؟", en:"Why Arabic is written right to left", hook:""},
+  {cat:"why", ar:"ليه بنضحك لما بنكون متوترين؟", en:"Why we laugh when nervous", hook:""},
+  {cat:"why", ar:"ليه بنحس إن المنتج الأغلى أحسن؟", en:"Why expensive feels better", hook:""},
+  {cat:"why", ar:"ليه حلبة الملاكمة مربعة؟", en:"Why a boxing ring is square", hook:""},
+  {cat:"why", ar:"ليه فاكر موقف محرج من ١٠ سنين وناسي أكلت إيه إمبارح؟", en:"Why embarrassing memories last", hook:""},
+  {cat:"why", ar:"ليه بيقدموا القهوة مع كوباية مية؟", en:"Why coffee is served with water", hook:""},
+  {cat:"why", ar:"لو الشمس اختفت إيه اللي هيحصل؟", en:"What if the sun disappeared", hook:""},
+  {cat:"why", ar:"ليه العروسة بتلبس أبيض في الفرح؟", en:"Why brides wear white", hook:""},
+  {cat:"why", ar:"ليه الناس بتشرب سفن أب لما بطنها توجعها؟", en:"Why people drink 7up for stomach aches", hook:""},
+  {cat:"why", ar:"لو الأرض وقفت تلف إيه اللي هيحصل؟", en:"What if Earth stopped spinning", hook:""}
 ];
 
 const el = id => document.getElementById(id);
@@ -1070,7 +1081,7 @@ const MODES = {
 function categoriesForMode(){ return OFFCUFF_CATEGORIES; }
 
 // ---------- no-repeat memory (per tab + category, survives reloads) ----------
-function usedKey(){ return (mode==='why' ? 'why-v3' : mode) + ':' + (mode==='offcuff' ? currentCategory : 'all'); }
+function usedKey(){ return (mode==='why' ? 'why-v4' : mode) + ':' + (mode==='offcuff' ? currentCategory : 'all'); }
 function loadUsedMap(){ try{ return JSON.parse(localStorage.getItem('ehky-used')||'{}') || {}; }catch(e){ return {}; } }
 function getUsed(){ const m = loadUsedMap(); return Array.isArray(m[usedKey()]) ? m[usedKey()] : []; }
 function setUsed(arr){ try{ const m = loadUsedMap(); m[usedKey()] = arr; localStorage.setItem('ehky-used', JSON.stringify(m)); }catch(e){} }
