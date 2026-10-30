@@ -627,7 +627,7 @@
   .bp-go{flex:0 0 38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(210,162,76,.35)}
   .bp-go svg{width:18px;height:18px}
   .bp-x{position:absolute;top:-9px;left:-7px;width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid rgba(239,231,216,.2);color:var(--text-dim);font:700 11px/1 sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
-  .bp-d{display:none;position:fixed;right:max(24px, calc(25vw - 285px));top:50%;transform:translateY(-50%);z-index:5;width:250px;padding:24px 20px 22px;border-radius:20px;text-align:center;text-decoration:none;color:var(--text);
+  .bp-d{display:none;position:fixed;right:max(24px, min(calc(27.5vw - 301px), calc(50vw - 586px)));top:50%;transform:translateY(-50%);z-index:5;width:250px;padding:24px 20px 22px;border-radius:20px;text-align:center;text-decoration:none;color:var(--text);
     background:linear-gradient(180deg,rgba(210,162,76,.11),rgba(255,255,255,.02));border:1px solid rgba(210,162,76,.4);box-shadow:0 20px 50px rgba(0,0,0,.35);transition:border-color .2s,transform .2s}
   .bp-d:hover{border-color:rgba(210,162,76,.75);transform:translateY(calc(-50% - 2px))}
   .bp-d .bp-ic{width:64px;height:64px;margin:0 auto 10px}
@@ -642,7 +642,6 @@
 </style>
 </head>
 <body>
-<script>try{if(Date.now()<(+localStorage.getItem('bosla_promo_off')||0))document.documentElement.className+=' bp-off'}catch(e){}</script>
 <a class="bp-d" href="https://bosla.uk" target="_blank" rel="noopener">
   <span class="bp-x" role="button" tabindex="0" aria-label="إغلاق">✕</span>
   <div class="bp-ic"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#0A0A0A"/><circle cx="50" cy="50" r="40" fill="none" stroke="#F5C242" stroke-width="7"/><path d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke="#F5C242" stroke-width="7" stroke-linecap="round"/><path d="M50 50 L73 22 L57 56 Z" fill="#F5C242"/><path d="M50 50 L27 78 L43 44 Z" fill="#FF3B2F"/><circle cx="50" cy="50" r="6" fill="#F5C242"/><circle cx="50" cy="50" r="2.6" fill="#0A0A0A"/></svg></div>
@@ -1775,7 +1774,7 @@ loadState();
 <!-- Free analytics (GoatCounter) -->
 <script data-goatcounter="https://anaswael.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
-document.querySelectorAll('.bp-x').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();document.documentElement.classList.add('bp-off');try{localStorage.setItem('bosla_promo_off',String(Date.now()+3*864e5))}catch(err){}});});
+document.querySelectorAll('.bp-x').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();document.documentElement.classList.add('bp-off');});});
 </script>
 </body>
 </html>
