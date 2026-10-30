@@ -611,11 +611,54 @@
     .overlay-caption{ margin-top:8px; font-size:13px; }
     .overlay-actions{ margin-top:12px; margin-bottom:6px; }
   }
+
+  /* ===== Bosla promo ===== */
+  .bp-m{display:none;position:relative;width:100%;align-items:center;gap:12px;margin:4px 0 22px;padding:12px 12px 12px 14px;border-radius:18px;text-decoration:none;color:var(--text);
+    background:linear-gradient(135deg,rgba(210,162,76,.17),rgba(210,162,76,.05) 60%,rgba(255,255,255,.02));
+    border:1px solid rgba(210,162,76,.4);box-shadow:0 10px 30px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.05);
+    -webkit-tap-highlight-color:transparent;transition:transform .15s,border-color .2s}
+  .bp-m:active{transform:scale(.985)}
+  .bp-lg{flex:0 0 44px;height:44px;border-radius:12px;background:#0f1713;border:1px solid rgba(210,162,76,.3);display:flex;align-items:center;justify-content:center}
+  .bp-lg svg{width:30px;height:30px}
+  .bp-tx{flex:1;min-width:0;text-align:right}
+  .bp-t1{display:flex;align-items:center;gap:7px;font-weight:800;font-size:15px;line-height:1.35;color:#fff}
+  .bp-tag{background:var(--accent);color:#14201b;font-size:10.5px;font-weight:800;border-radius:999px;padding:1px 8px;line-height:1.6;flex-shrink:0}
+  .bp-t2{display:block;font-weight:600;font-size:13px;color:#dccfb3;margin-top:2px;line-height:1.5}
+  .bp-go{flex:0 0 38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(210,162,76,.35)}
+  .bp-go svg{width:18px;height:18px}
+  .bp-x{position:absolute;top:-9px;left:-7px;width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid rgba(239,231,216,.2);color:var(--text-dim);font:700 11px/1 sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  .bp-d{display:none;position:fixed;left:32px;top:50%;transform:translateY(-50%);z-index:5;width:250px;padding:24px 20px 22px;border-radius:20px;text-align:center;text-decoration:none;color:var(--text);
+    background:linear-gradient(180deg,rgba(210,162,76,.11),rgba(255,255,255,.02));border:1px solid rgba(210,162,76,.4);box-shadow:0 20px 50px rgba(0,0,0,.35);transition:border-color .2s,transform .2s}
+  .bp-d:hover{border-color:rgba(210,162,76,.75);transform:translateY(calc(-50% - 2px))}
+  .bp-d .bp-ic{width:64px;height:64px;margin:0 auto 10px}
+  .bp-d .bp-ic svg{width:100%;height:100%}
+  .bp-d h3{margin:8px 0 6px;font-weight:800;font-size:20px;color:#fff}
+  .bp-d p{margin:0 0 16px;color:#c9d4cd;font-weight:600;font-size:14px;line-height:1.8}
+  .bp-btn{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#14201b;font-weight:800;border-radius:999px;padding:10px 20px;font-size:15px}
+  .bp-d .bp-x{top:10px;left:10px}
+  @media (max-width:1099px){ .bp-m{display:flex} }
+  @media (min-width:1100px){ .bp-d{display:block} }
+  body.mirrored .bp-m, body.mirrored .bp-d, html.bp-off .bp-m, html.bp-off .bp-d{display:none!important}
 </style>
 </head>
 <body>
+<script>try{if(Date.now()<(+localStorage.getItem('bosla_promo_off')||0))document.documentElement.className+=' bp-off'}catch(e){}</script>
+<a class="bp-d" href="https://bosla.uk" target="_blank" rel="noopener">
+  <span class="bp-x" role="button" tabindex="0" aria-label="إغلاق">✕</span>
+  <div class="bp-ic"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#0A0A0A"/><circle cx="50" cy="50" r="40" fill="none" stroke="#F5C242" stroke-width="7"/><path d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke="#F5C242" stroke-width="7" stroke-linecap="round"/><path d="M50 50 L73 22 L57 56 Z" fill="#F5C242"/><path d="M50 50 L27 78 L43 44 Z" fill="#FF3B2F"/><circle cx="50" cy="50" r="6" fill="#F5C242"/><circle cx="50" cy="50" r="2.6" fill="#0A0A0A"/></svg></div>
+  <span class="bp-tag">جديد</span>
+  <h3>كورس «البوصلة»</h3>
+  <p>اتعلم تدوّر على مصادر موثوقة، وتفرق بينها وبين الكلام الفاضي.</p>
+  <span class="bp-btn">اعرف أكتر ←</span>
+</a>
 
 <div class="wrap">
+  <a class="bp-m" href="https://bosla.uk" target="_blank" rel="noopener">
+    <span class="bp-x" role="button" tabindex="0" aria-label="إغلاق">✕</span>
+    <span class="bp-lg"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#0A0A0A"/><circle cx="50" cy="50" r="40" fill="none" stroke="#F5C242" stroke-width="7"/><path d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke="#F5C242" stroke-width="7" stroke-linecap="round"/><path d="M50 50 L73 22 L57 56 Z" fill="#F5C242"/><path d="M50 50 L27 78 L43 44 Z" fill="#FF3B2F"/><circle cx="50" cy="50" r="6" fill="#F5C242"/><circle cx="50" cy="50" r="2.6" fill="#0A0A0A"/></svg></span>
+    <span class="bp-tx"><span class="bp-t1">كورس «البوصلة» <span class="bp-tag">جديد</span></span><span class="bp-t2">اتعلم تدوّر على مصادر موثوقة</span></span>
+    <span class="bp-go"><svg viewBox="0 0 24 24" fill="none" stroke="#14201b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span>
+  </a>
   <div class="brand">
     <h1>احكي بقى</h1>
     <div class="social-row">
@@ -638,23 +681,6 @@
             </svg>
           </span>
           <strong dir="ltr"><bdi>anaswael_</bdi></strong>
-        </a>
-        <a class="made-by" href="https://www.youtube.com/@anaswaellll" target="_blank" rel="noopener">
-          <span class="ig-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M21.6 7.2c-.25-.94-1-1.68-1.95-1.93C18 4.8 12 4.8 12 4.8s-6 0-7.65.47c-.94.25-1.7.99-1.95 1.93C2 8.86 2 12 2 12s0 3.14.4 4.8c.25.94 1 1.68 1.95 1.93C6 19.2 12 19.2 12 19.2s6 0 7.65-.47c.94-.25 1.7-.99 1.95-1.93.4-1.66.4-4.8.4-4.8s0-3.14-.4-4.8z"></path>
-              <path d="M10 15V9l5.2 3z" fill="var(--bg-3)"></path>
-            </svg>
-          </span>
-          <strong dir="ltr"><bdi>anaswaellll</bdi></strong>
-        </a>
-        <a class="made-by" href="https://www.facebook.com/profile.php?id=61594572400816" target="_blank" rel="noopener">
-          <span class="ig-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.87.25-1.46 1.5-1.46h1.6V4.46A21 21 0 0 0 14.3 4.3c-2.3 0-3.8 1.4-3.8 3.95v2.25H8v3h2.5V21h3z"></path>
-            </svg>
-          </span>
-          <strong><bdi>Anas Wael</bdi></strong>
         </a>
       </div>
     </div>
@@ -1748,5 +1774,8 @@ loadState();
 
 <!-- Free analytics (GoatCounter) -->
 <script data-goatcounter="https://anaswael.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+document.querySelectorAll('.bp-x').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();document.documentElement.classList.add('bp-off');try{localStorage.setItem('bosla_promo_off',String(Date.now()+3*864e5))}catch(err){}});});
+</script>
 </body>
 </html>
